@@ -3,6 +3,14 @@
 	http://snap.stanford.edu
 ========================================================================
 
+> This repository is adapted from SNAP version "6.0". We plan to make 
+> manual optimizations to it, such as accelerate its execution with 
+> multi-threading or cuda.
+>
+> Source code: http://snap.stanford.edu/snap/index.html
+>
+> Fudanyrd (2025-10-04)
+
 Stanford Network Analysis Platform (SNAP) is a general purpose, high
 performance system for analysis and manipulation of large networks.
 SNAP is written in C++ and it scales to massive graphs with hundreds

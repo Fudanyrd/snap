@@ -20,6 +20,8 @@ build/
 *.o
 *.dSYM/
 *.pyc
+perf.data
+perf.data.old
 
 # Test-generated files 
 test_*.dat
