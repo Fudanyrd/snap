@@ -5,7 +5,7 @@
 all: MakeAll
 
 MakeAll:
-	mkdir Release
+	mkdir -p Release
 	$(MAKE) -C agmfit
 	$(MAKE) -C agmgen
 	$(MAKE) -C bigclam
