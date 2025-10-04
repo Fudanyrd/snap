@@ -299,7 +299,7 @@ void TAGMUtil::DumpCmtyVV(const TStr& OutFNm, const TVec<TIntV>& CmtyVV) {
 /// dump bipartite community affiliation into a text file with node names
 void TAGMUtil::DumpCmtyVV(const TStr OutFNm, TVec<TIntV>& CmtyVV, TIntStrH& NIDNmH) {
   FILE* F = fopen(OutFNm.CStr(), "wt");
-  if (F == nullptr) {
+  if (F == (FILE *)0) {
     perror("fopen");
     return;
   }
