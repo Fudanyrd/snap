@@ -3,6 +3,8 @@
 #include "agm.h"
 #include "agmfit.h"
 
+#include <stdio.h>
+
 /////////////////////////////////////////////////
 // AGM graph generation.
 
@@ -297,6 +299,10 @@ void TAGMUtil::DumpCmtyVV(const TStr& OutFNm, const TVec<TIntV>& CmtyVV) {
 /// dump bipartite community affiliation into a text file with node names
 void TAGMUtil::DumpCmtyVV(const TStr OutFNm, TVec<TIntV>& CmtyVV, TIntStrH& NIDNmH) {
   FILE* F = fopen(OutFNm.CStr(), "wt");
+  if (F == nullptr) {
+    perror("fopen");
+    return;
+  }
   for (int c = 0; c < CmtyVV.Len(); c++) {
     for (int u = 0; u < CmtyVV[c].Len(); u++) {
       if (NIDNmH.IsKey(CmtyVV[c][u])){
@@ -309,6 +315,36 @@ void TAGMUtil::DumpCmtyVV(const TStr OutFNm, TVec<TIntV>& CmtyVV, TIntStrH& NIDN
     fprintf(F, "\n");
   }
   fclose(F);
+}
+
+THash<TInt, TIntTr> TAGMUtil::DefaultColorTable(
+const PUNGraph &G, const TVec<TIntV> &CmtyVV,
+const THash<TInt, TStr>& NIDNameH) {
+  static const int colormap[][3] = {
+    {0xff, 0x80, 0x80}, /* #ff8080 */
+    {0x8d, 0xd3, 0x5f}, /* #8dd35f */
+    {0xff, 0xe6, 0x80}, /* #ffe680 */
+    {0x23, 0xa8, 0xf2}, /* #23a8f2 */
+    {0x4b, 0x02, 0x66}, /* #4b0266 */
+    {0xc0, 0xc0, 0xc0}, /* #c0c0c0 */
+    {0xff, 0x20, 0x10}, /* #ff2010 */
+    {0x0d, 0xff, 0x7f}, /* #0dff7f */
+  };
+  const int colors = sizeof(colormap) / sizeof(colormap[0]);
+
+  THash<TInt, TIntTr> ret;
+  const int groups = CmtyVV.Len();
+  for (int c = 0; c < groups; c++) {
+    const int members = CmtyVV[c].Len();
+    const int color = c % colors;
+    for (int u = 0; u < members; u++) {
+      /* Assign a color to this member. */
+      ret.AddDat(CmtyVV[c][u], TIntTr(colormap[color][0],
+        colormap[color][1], colormap[color][2]));
+    }
+  }
+
+  return ret;
 }
 
 /// total number of memberships (== sum of the sizes of communities)

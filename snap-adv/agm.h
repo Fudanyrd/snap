@@ -57,9 +57,24 @@ public:
     SaveGephi(OutFNm, G, CmtyVVAtr, MaxSz, MinSz, TmpH);
   }
   static void SaveGephi(const TStr& OutFNm, const PUNGraph& G, const TVec<TIntV >& CmtyVVAtr, const double MaxSz, const double MinSz, const THash<TInt, TStr>& NIDNameH) { 
-    THash<TInt, TIntTr> TmpH; 
+    THash<TInt, TIntTr> TmpH = DefaultColorTable(G, CmtyVVAtr, 
+      NIDNameH); 
     SaveGephi(OutFNm, G, CmtyVVAtr, MaxSz, MinSz, NIDNameH, TmpH);
   }
+  
+  /**
+   * Generate a default color table for each non-intersect groups 
+   * of nodes. 
+   * @param G: the graph(with nodes and edges)
+   * @param CmtyVV: list of groups, each group is a list of nodes.
+   * @param NIDNameH: a hash table mapping nid to name.
+   * @author Fudanyrd
+   */
+  static THash<TInt, TIntTr> DefaultColorTable(
+    const PUNGraph& G,
+    const TVec<TIntV>& CmtyVV,
+    const THash<TInt, TStr>& NIDNameH);
+
   static void SaveGephi(const TStr& OutFNm, const PUNGraph& G, const TVec<TIntV >& CmtyVVAtr, const double MaxSz, const double MinSz, const THash<TInt, TStr>& NIDNameH, const THash<TInt, TIntTr >& NIDColorH);
   static void SaveBipartiteGephi(const TStr& OutFNm, const TIntV& NIDV, const TVec<TIntV>& CmtyVV, const double MaxSz, const double MinSz, const TIntStrH& NIDNameH, const THash<TInt, TIntTr >& NIDColorH, const THash<TInt, TIntTr >& CIDColorH);
   static int FindComsByAGM(const PUNGraph& Graph, const int InitComs, const int MaxIter, const int RndSeed, const double RegGap, const double PNoCom = 0.0, const TStr PltFPrx = TStr());
