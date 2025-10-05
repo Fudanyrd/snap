@@ -1159,6 +1159,11 @@ public:
   void Defrag();
   void Pack() {KeyV.Pack(); }
 
+  /** 
+   * @return the underlying list of keys.
+   */
+  const TVec<THashSetKey<TKey> > &GetKeys(void) const { return this->KeyV; }
+
   static THashSet<TKey> GetSet(const TKey& Key1){
 	THashSet<TKey> Set(1); Set.AddKey(Key1); return Set;}
   static THashSet<TKey> GetSet(const TKey& Key1, const TKey& Key2){

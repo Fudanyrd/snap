@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "agmfit.h"
 #include "agm.h"
+#include "thread.h"
 
 /////////////////////////////////////////////////
 // AGM fitting
@@ -73,24 +74,80 @@ void TAGMFit::SetDefaultPNoCom() {
   PNoCom = 1.0 / (double) G->GetNodes() / (double) G->GetNodes();
 }
 
-double TAGMFit::Likelihood(const TFltV& NewLambdaV, double& LEdges, double& LNoEdges) {
+void TAGMFit::LikelihoodWorker(void **args) {
+  /* const TAGMFit *fit, double *dst, int *start, int *end, const TFltV *lambda */
+  const TAGMFit *fit = (TAGMFit *)args[0];
+  double *dst = (double *)args[1];
+  const int start = *(int *)args[2];
+  const int end = *(int *)args[3];
+  const TFltV *lambda = (TFltV *)args[4];
+
+  const TFltV &NewLambdaV = *lambda;
+  double inc = 0.0;
+  for (int e = start; e < end; e++) {
+    const TIntSet& JointCom = fit->EdgeComVH[e];
+    double LambdaSum = fit->SelectLambdaSum(NewLambdaV, JointCom);
+    double Puv;
+    if (JointCom.Len() == 0) {  Puv = fit->PNoCom;  }
+    else { Puv = 1 - exp(- LambdaSum); }
+    IAssert(! _isnan(log(Puv)));
+    inc += log(Puv);
+  }
+
+  (*dst) += inc;
+}
+
+double TAGMFit::Likelihood(const TFltV& NewLambdaV, double& LEdges, double& LNoEdges) const {
   IAssert(CIDNSetV.Len() == NewLambdaV.Len());
   IAssert(ComEdgesV.Len() == CIDNSetV.Len());
+
   LEdges = 0.0; LNoEdges = 0.0;
-  for (int e = 0; e < EdgeComVH.Len(); e++) {
-    TIntSet& JointCom = EdgeComVH[e];
-    double LambdaSum = SelectLambdaSum(NewLambdaV, JointCom);
-    double Puv = 1 - exp(- LambdaSum);
-    if (JointCom.Len() == 0) {  Puv = PNoCom;  }
-    IAssert(! _isnan(log(Puv)));
-    LEdges += log(Puv);
-  }
+  const int EdgeComVHLen = this->EdgeComVH.Len() /* = 613 */;
+  // for (int e = 0; e < EdgeComVHLen; e++) {
+  //   const TIntSet& JointCom = EdgeComVH[e];
+  //   double LambdaSum = SelectLambdaSum(NewLambdaV, JointCom);
+  //   double Puv;
+  //   if (JointCom.Len() == 0) {  Puv = PNoCom;  }
+  //   else { Puv = 1 - exp(- LambdaSum); }
+  //   IAssert(! _isnan(log(Puv)));
+  //   LEdges += log(Puv);
+  // }
+  do {
+    const int BatchSize = (EdgeComVHLen + TPOOL_WORKERS - 1) / TPOOL_WORKERS;
+    double Results[TPOOL_WORKERS];
+    int Starts[TPOOL_WORKERS];
+    int Ends[TPOOL_WORKERS];
+
+    for (int t = 0; t < TPOOL_WORKERS; t++) {
+      int start = t * BatchSize;
+      int end = start + BatchSize;
+      start = start > EdgeComVHLen ? EdgeComVHLen : start;
+      end = end > EdgeComVHLen ? EdgeComVHLen : end;
+      Starts[t] = start;
+      Ends[t] = end;
+      Results[t] = 0.0;
+      void *args[] = { (void *)this, (void *)&Results[t], (void *)&Starts[t], 
+        (void *)&Ends[t], (void *)&NewLambdaV };
+      memcpy(&taskBuf[t].args, args, sizeof(args));
+      taskBuf[t].routine = TAGMFit::LikelihoodWorker;
+      taskBuf[t].finished = 0;
+      tpool.AddTasks(&taskBuf[t], 1);
+    }
+
+    // tpool.AddTasks(taskBuf, TPOOL_WORKERS);
+    for (int t = 0; t < TPOOL_WORKERS; t++) {
+      taskBuf[t].waitfor();
+      LEdges += Results[t];
+    }
+  } while (0);
+
   for (int k = 0; k < NewLambdaV.Len(); k++) {
     int MaxEk = CIDNSetV[k].Len() * (CIDNSetV[k].Len() - 1) / 2;
     int NotEdgesInCom = MaxEk - ComEdgesV[k];
     if(NotEdgesInCom > 0) {
-      if (LNoEdges >= TFlt::Mn + double(NotEdgesInCom) * NewLambdaV[k]) { 
-        LNoEdges -= double(NotEdgesInCom) * NewLambdaV[k];
+      const double inc = double(NotEdgesInCom) * NewLambdaV[k];
+      if (LNoEdges >= TFlt::Mn + inc) { 
+        LNoEdges -= inc;
       }
     }
   }
@@ -595,7 +652,8 @@ void TAGMFit::SetCmtyVV(const TVec<TIntV>& CmtyVV) {
 void TAGMFit::GradLogLForLambda(TFltV& GradV) {
   GradV.Gen(LambdaV.Len());
   TFltV SumEdgeProbsV(LambdaV.Len());
-  for (int e = 0; e < EdgeComVH.Len(); e++) {
+  const int EdgeComVHLen = EdgeComVH.Len() /* = 613 */;
+  for (int e = 0; e < EdgeComVHLen; e++) {
     TIntSet& JointCom = EdgeComVH[e];
     double LambdaSum = SelectLambdaSum(JointCom);
     double Puv = 1 - exp(- LambdaSum);
@@ -604,7 +662,9 @@ void TAGMFit::GradLogLForLambda(TFltV& GradV) {
       SumEdgeProbsV[SI.GetKey()] += (1 - Puv) / Puv;
     }
   }
-  for (int k = 0; k < LambdaV.Len(); k++) {
+
+  const int LambdaVLen = LambdaV.Len() /* = 23 */;
+  for (int k = 0; k < LambdaVLen; k++) {
     int MaxEk = CIDNSetV[k].Len() * (CIDNSetV[k].Len() - 1) / 2;
     int NotEdgesInCom = MaxEk - ComEdgesV[k];
     GradV[k] = SumEdgeProbsV[k] - (double) NotEdgesInCom;
@@ -615,16 +675,28 @@ void TAGMFit::GradLogLForLambda(TFltV& GradV) {
 }
 
 // Compute sum of lambda_c (which is log (1 - p_c)) over C_uv (ComK). It is used to compute edge probability P_uv.
-double TAGMFit::SelectLambdaSum(const TIntSet& ComK) { 
+double TAGMFit::SelectLambdaSum(const TIntSet& ComK) const { 
   return SelectLambdaSum(LambdaV, ComK); 
 }
 
-double TAGMFit::SelectLambdaSum(const TFltV& NewLambdaV, const TIntSet& ComK) {
+double TAGMFit::SelectLambdaSum(const TFltV& NewLambdaV, const TIntSet& ComK) const {
   double Result = 0.0;
-  for (TIntSet::TIter SI = ComK.BegI(); SI < ComK.EndI(); SI++) {
-    IAssert(NewLambdaV[SI.GetKey()] >= 0);
-    Result += NewLambdaV[SI.GetKey()];
+  const TVec<THashSetKey<TInt> > &Keys = ComK.GetKeys();
+  const int Len = Keys.Len();
+  for (int i = 0; i < Len; i++) {
+    const THashSetKey<TInt> Key = Keys[i];
+    if (Key.HashCd == -1) {
+      continue;
+    }
+    const TFlt Flt = NewLambdaV[Key.Key];
+    IAssert(Flt >= 0);
+    Result += Flt;
   }
+
+  // for (TIntSet::TIter SI = ComK.BegI(); SI < ComK.EndI(); SI++) {
+  //   IAssert(NewLambdaV[SI.GetKey()] >= 0);
+  //   Result += NewLambdaV[SI.GetKey()];
+  // }
   return Result;
 }
 

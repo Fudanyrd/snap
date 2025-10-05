@@ -21,6 +21,7 @@ private:
   TFlt MaxLambda; ///< Maximum value of regularization parameter lambda (default = 10).
   TFlt RegCoef; ///< Regularization parameter when we fit for P_c (for finding # communities).
   TInt BaseCID; ///< ID of the Epsilon-community (in case we fit P_c of the epsilon community). We do not fit for the Epsilon-community in general.
+  static void LikelihoodWorker(void **args);
 
 public:
   TAGMFit() { }
@@ -41,7 +42,7 @@ public:
   /// COMMENT.
   double Likelihood();
   double Likelihood(const TFltV& NewLambdaV) { double Tmp1, Tmp2; return Likelihood(NewLambdaV, Tmp1, Tmp2); }
-  double Likelihood(const TFltV& NewLambdaV, double& LEdges, double& LNoEdges);
+  double Likelihood(const TFltV& NewLambdaV, double& LEdges, double& LNoEdges) const;
   void SetRegCoef(const double Val) { RegCoef = Val; }
   /// For each <tt>(u, v)</tt> in edges, precompute \c C_uv (the set of communities nodes u and v share).
   void GetEdgeJointCom();
@@ -61,9 +62,9 @@ public:
   // OP RS 2014/04/10 commented out since there is no implementation
   //void GetNewtonStep(TFltVV& HVV, TFltV& GradV, TFltV& DeltaLV);
   /// Compute sum of \c lambda_c (which is log (1 - \c p_c)) over \c C_uv (<tt>ComK</tt>). The function is used to compute edge probability \c P_uv.
-  double SelectLambdaSum(const TIntSet& ComK);
+  double SelectLambdaSum(const TIntSet& ComK) const;
   /// COMMENT.
-  double SelectLambdaSum(const TFltV& NewLambdaV, const TIntSet& ComK);
+  double SelectLambdaSum(const TFltV& NewLambdaV, const TIntSet& ComK) const;
   
   /// COMMENT.
   void RandomInit(const int& MaxK);
