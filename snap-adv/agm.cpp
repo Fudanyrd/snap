@@ -466,6 +466,10 @@ void TAGMUtil::SaveGephi(const TStr& OutFNm, const PUNGraph& G, const TVec<TIntV
   TAGMUtil::GetNodeMembership(NIDComVHAtr, CmtyVVAtr);
 
   FILE* F = fopen(OutFNm.CStr(), "wt");
+  if (F == (FILE *)0) {
+    perror("fopen");
+    return;
+  }
   fprintf(F, "<?xml version='1.0' encoding='UTF-8'?>\n");
   fprintf(F, "<gexf xmlns='http://www.gexf.net/1.2draft' xmlns:viz='http://www.gexf.net/1.1draft/viz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd' version='1.2'>\n");
   fprintf(F, "\t<graph mode='static' defaultedgetype='undirected'>\n");

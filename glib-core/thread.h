@@ -2,7 +2,9 @@
 #define THREAD_H
 #include <pthread.h>
 
-#define TPOOL_WORKERS 4
+#ifndef TPOOL_WORKERS
+#define TPOOL_WORKERS 6
+#endif // TPOOL_WORKERS
 
 struct Task {
   void *args[6];
