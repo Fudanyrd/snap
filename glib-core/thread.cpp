@@ -81,3 +81,7 @@ ThreadPool::ThreadPool() {
     pthread_create(&this->workers[i], NULL, worker, (void *)this);
   }
 }
+
+ThreadPool tpool;
+Task taskBuf[TPOOL_WORKERS];
+

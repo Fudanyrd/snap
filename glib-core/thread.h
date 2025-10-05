@@ -2,7 +2,7 @@
 #define THREAD_H
 #include <pthread.h>
 
-#define TPOOL_WORKERS 8
+#define TPOOL_WORKERS 4
 
 struct Task {
   void *args[6];
@@ -21,6 +21,7 @@ struct Task {
   Task() : finished(0) {
     pthread_cond_init(&host_cond, (const pthread_condattr_t *) 0);
     pthread_mutex_init(&lock, (const pthread_mutexattr_t *) 0);
+    finished = 0;
   }
 
   void waitfor(void);
@@ -47,5 +48,11 @@ class ThreadPool {
 
   void AddTasks(Task *, int);
 };
+
+/* Global Thread pool. */
+extern ThreadPool tpool;
+
+/* Buffer of tasks. Used by main thread ONLY */
+extern Task taskBuf[TPOOL_WORKERS];
 
 #endif // THREAD_H

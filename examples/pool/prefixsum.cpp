@@ -7,8 +7,6 @@
 static int A[N];
 static int B[N];
 
-static Task taskBuf[TPOOL_WORKERS];
-
 static void init_task(void **args) {
   /* int *arr, int value, int len */
 
@@ -48,7 +46,6 @@ static void add_task(void **args) {
 
 int main(int argc, char **argv) {
   /* Initialize buffer */
-  ThreadPool tpool;
   const int seglen = N / TPOOL_WORKERS;
   for (int i = 0; i < TPOOL_WORKERS; i++) {
     Task &t = taskBuf[i];
