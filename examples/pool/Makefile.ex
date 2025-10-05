@@ -1,0 +1,3 @@
+MAIN = prefixsum
+DEPH =
+DEPCPP = 

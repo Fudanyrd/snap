@@ -40,6 +40,9 @@
 #include "casc.cpp"          // cascade graph construction from events^M
 #include "sim.cpp"           // K-nearest neighbors
 
+// multi-threading
+#include "thread.cpp"        // thread pool
+
 // graph generators
 #include "ggen.cpp"          // graph generators (preferential attachment, small-world, ...)
 #include "ff.cpp"            // forest fire graph generator

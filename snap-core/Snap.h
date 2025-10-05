@@ -46,6 +46,9 @@
 #include "casc.h"            // cascade graph construction from events^M
 #include "sim.h"             // K-nearest neighbors
 
+// multi-threading
+#include "thread.h"          // thread pool
+
 
 // graph generators
 #include "ggen.h"            // graph generators (preferential attachment, small-world, ...)

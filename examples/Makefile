@@ -41,6 +41,7 @@ MakeAll:
 	$(MAKE) -C netinf
 	$(MAKE) -C netstat
 	$(MAKE) -C node2vec
+	$(MAKE) -C pool
 	$(MAKE) -C randwalk
 	$(MAKE) -C rolx
 	$(MAKE) -C temporalmotifs
@@ -81,6 +82,7 @@ clean:
 	$(MAKE) clean -C netinf
 	$(MAKE) clean -C netstat
 	$(MAKE) clean -C node2vec
+	$(MAKE) clean -C pool
 	$(MAKE) clean -C randwalk
 	$(MAKE) clean -C rolx
 	$(MAKE) clean -C temporalmotifs
