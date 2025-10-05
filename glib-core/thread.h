@@ -16,7 +16,12 @@ struct Task {
 
   pthread_mutex_t lock;
   /** Track number of completed workers. */
-  int finished;
+  volatile int finished;
+
+  Task() : finished(0) {
+    pthread_cond_init(&host_cond, (const pthread_condattr_t *) 0);
+    pthread_mutex_init(&lock, (const pthread_mutexattr_t *) 0);
+  }
 
   void waitfor(void);
 };
