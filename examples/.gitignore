@@ -3,7 +3,9 @@
 */.DS_Store
 */*.dSYM
 Release/
+*.gexf
 agmfit/agmfitmain
+agmfit/cmtyvv.txt
 agmgen/agmgen
 bigclam/bigclam
 cascadegen/cascadegen
@@ -39,4 +41,5 @@ node2vec/node2vec
 randwalk/randwalk
 rolx/testrolx
 temporalmotifs/temporalmotifsmain
+pool/prefixsum
 testgraph/testgraph
