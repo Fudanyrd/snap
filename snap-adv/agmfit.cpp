@@ -83,13 +83,15 @@ void TAGMFit::LikelihoodWorker(void **args) {
   const TFltV *lambda = (TFltV *)args[4];
 
   const TFltV &NewLambdaV = *lambda;
-  double inc = 0.0;
+  register double inc = 0.0;
   for (int e = start; e < end; e++) {
     const TIntSet& JointCom = fit->EdgeComVH[e];
-    double LambdaSum = fit->SelectLambdaSum(NewLambdaV, JointCom);
     double Puv;
     if (JointCom.Len() == 0) {  Puv = fit->PNoCom;  }
-    else { Puv = 1 - exp(- LambdaSum); }
+    else { 
+      double LambdaSum = fit->SelectLambdaSum(NewLambdaV, JointCom);
+      Puv = 1 - exp(- LambdaSum); 
+    }
     IAssert(! _isnan(log(Puv)));
     inc += log(Puv);
   }
@@ -101,6 +103,7 @@ double TAGMFit::Likelihood(const TFltV& NewLambdaV, double& LEdges, double& LNoE
   IAssert(CIDNSetV.Len() == NewLambdaV.Len());
   IAssert(ComEdgesV.Len() == CIDNSetV.Len());
 
+  double Results[TPOOL_WORKERS];
   LEdges = 0.0; LNoEdges = 0.0;
   const int EdgeComVHLen = this->EdgeComVH.Len() /* = 613 */;
   // for (int e = 0; e < EdgeComVHLen; e++) {
@@ -114,7 +117,6 @@ double TAGMFit::Likelihood(const TFltV& NewLambdaV, double& LEdges, double& LNoE
   // }
   do {
     const int BatchSize = (EdgeComVHLen + TPOOL_WORKERS - 1) / TPOOL_WORKERS;
-    double Results[TPOOL_WORKERS];
     int Starts[TPOOL_WORKERS];
     int Ends[TPOOL_WORKERS];
 
@@ -135,10 +137,6 @@ double TAGMFit::Likelihood(const TFltV& NewLambdaV, double& LEdges, double& LNoE
     }
 
     // tpool.AddTasks(taskBuf, TPOOL_WORKERS);
-    for (int t = 0; t < TPOOL_WORKERS; t++) {
-      taskBuf[t].waitfor();
-      LEdges += Results[t];
-    }
   } while (0);
 
   for (int k = 0; k < NewLambdaV.Len(); k++) {
@@ -154,6 +152,13 @@ double TAGMFit::Likelihood(const TFltV& NewLambdaV, double& LEdges, double& LNoE
   double LReg = 0.0;
   if (RegCoef > 0.0) {
     LReg = - RegCoef * TLinAlg::SumVec(NewLambdaV);
+  }
+
+
+  /* Wait for workers to complete. */
+  for (int t = 0; t < TPOOL_WORKERS; t++) {
+    taskBuf[t].waitfor();
+    LEdges += Results[t];
   }
   return LEdges + LNoEdges + LReg;
 }
@@ -684,7 +689,7 @@ double TAGMFit::SelectLambdaSum(const TFltV& NewLambdaV, const TIntSet& ComK) co
   const TVec<THashSetKey<TInt> > &Keys = ComK.GetKeys();
   const int Len = Keys.Len();
   for (int i = 0; i < Len; i++) {
-    const THashSetKey<TInt> Key = Keys[i];
+    const THashSetKey<TInt> &Key = Keys[i];
     if (Key.HashCd == -1) {
       continue;
     }
