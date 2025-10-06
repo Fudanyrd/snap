@@ -535,30 +535,118 @@ int TAGMFit::RemoveEmptyCom() {
   return DelCnt;
 }
 
+void TAGMFit::SeekLeaveWorker(void **args) {
+  const TAGMFit *Self = (TAGMFit *)args[0];
+  const int UID = *(int *)args[1];
+  const int CID = *(int *)args[2];
+  double *Delta = (double *)args[3];
+  const int start = *(int *)args[4];
+  const int end = *(int *)args[5];
+
+  int NbhsInC = 0;
+  double inc = 0;
+  const double LambdaC = Self->LambdaV[CID];
+
+  for (int e = start; e < end; e++) {
+    const int VID = Self->G->GetNI(UID).GetNbrNId(e);
+    if (! Self->NIDComVH.GetDat(VID).IsKey(CID)) { continue; }
+    TIntPr SrcDstNIDPr(TMath::Mn(UID,VID), TMath::Mx(UID,VID));
+    const TIntSet& JointCom = Self->EdgeComVH.GetDat(SrcDstNIDPr);
+    double CurPuv, NewPuv;
+    const double LambdaSum = Self->SelectLambdaSum(JointCom);
+    CurPuv = 1 - exp(- LambdaSum);
+    // NewPuv = 1 - exp(- LambdaSum + LambdaC);
+    IAssert(JointCom.Len() > 0);
+    if (JointCom.Len() == 1) {
+      NewPuv = Self->PNoCom;
+    } else {
+      NewPuv = 1 - exp(- LambdaSum + LambdaC);
+    }
+    inc += (log(NewPuv) - log(CurPuv));
+    IAssert(!_isnan(inc));
+    NbhsInC++;
+  }
+
+  // LambdaC * (Self->CIDNSetV[CID].Len() - 1 - NbhsInC);
+  inc -= LambdaC * NbhsInC;
+  (*Delta) += inc;
+}
+
 // Compute the change in likelihood (Delta) if node UID leaves community CID.
-double TAGMFit::SeekLeave(const int& UID, const int& CID) {
+double TAGMFit::SeekLeave(const int& UID, const int& CID) const {
   IAssert(CIDNSetV[CID].IsKey(UID));
   IAssert(G->IsNode(UID));
   double Delta = 0.0;
   TUNGraph::TNodeI NI = G->GetNI(UID);
-  int NbhsInC = 0;
-  for (int e = 0; e < NI.GetDeg(); e++) {
-    const int VID = NI.GetNbrNId(e);
-    if (! NIDComVH.GetDat(VID).IsKey(CID)) { continue; }
-    TIntPr SrcDstNIDPr(TMath::Mn(UID,VID), TMath::Mx(UID,VID));
-    TIntSet& JointCom = EdgeComVH.GetDat(SrcDstNIDPr);
-    double CurPuv, NewPuv, LambdaSum = SelectLambdaSum(JointCom);
-    CurPuv = 1 - exp(- LambdaSum);
-    NewPuv = 1 - exp(- LambdaSum + LambdaV[CID]);
-    IAssert(JointCom.Len() > 0);
-    if (JointCom.Len() == 1) {
-      NewPuv = PNoCom;
+  const int Edges = NI.GetDeg();
+  // int NbhsInC = 0;
+  // for (int e = 0; e < NI.GetDeg(); e++) {
+  //   const int VID = NI.GetNbrNId(e);
+  //   if (! NIDComVH.GetDat(VID).IsKey(CID)) { continue; }
+  //   TIntPr SrcDstNIDPr(TMath::Mn(UID,VID), TMath::Mx(UID,VID));
+  //   const TIntSet& JointCom = EdgeComVH.GetDat(SrcDstNIDPr);
+  //   double CurPuv, NewPuv, LambdaSum = SelectLambdaSum(JointCom);
+  //   CurPuv = 1 - exp(- LambdaSum);
+  //   NewPuv = 1 - exp(- LambdaSum + LambdaV[CID]);
+  //   IAssert(JointCom.Len() > 0);
+  //   if (JointCom.Len() == 1) {
+  //     NewPuv = PNoCom;
+  //   }
+  //   Delta += (log(NewPuv) - log(CurPuv));
+  //   IAssert(!_isnan(Delta));
+  //   NbhsInC++;
+  // }
+  if (Edges >= 128) {
+    int Starts[TPOOL_TASKS], Ends[TPOOL_TASKS];
+    double Results[TPOOL_TASKS];
+    
+    /**
+     * Note on `SliceSize` selection: the degree(# edges) of each
+     * vertice may be unevenly distributed. Should give each worker
+     * enough task(Here: end - start >= 64) to avoid lock contention.
+     */
+    const int SliceSize = TMath::Mn(TPOOL_WORKERS, Edges / 32);
+    const int BatchSize = (Edges + SliceSize - 1) / SliceSize;
+    int start = 0, end = BatchSize;
+  
+    for (int t = 0; t < SliceSize; t++) {
+      start = start > Edges ? Edges : start;
+      end = end > Edges ? Edges : end;
+      Starts[t] = start;
+      Ends[t] = end;
+      Results[t] = 0.0;
+      void **args = taskBuf[t].args;
+      args[0] = (void *)this;
+      args[1] = (void *)&UID;
+      args[2] = (void *)&CID;
+      args[3] = (void *)&Results[t];
+      args[4] = (void *)&Starts[t];
+      args[5] = (void *)&Ends[t];
+      taskBuf[t].routine = TAGMFit::SeekLeaveWorker;
+      tpool.push(&taskBuf[t]);
+      start = end;
+      end += BatchSize;
     }
-    Delta += (log(NewPuv) - log(CurPuv));
-    IAssert(!_isnan(Delta));
-    NbhsInC++;
+  
+    Task *fini;
+    while ((fini = tpool.waitFor()) != (Task *) 0) {
+      Delta += *(const double *) fini->args[3];
+    }
+  } else {
+    void *args[6];
+    int start = 0;
+    int end = Edges;
+    args[0] = (void *)this;
+    args[1] = (void *)&UID;
+    args[2] = (void *)&CID;
+    args[3] = (void *)&Delta;
+    args[4] = (void *)&start;
+    args[5] = (void *)&end;
+    SeekLeaveWorker(args);
   }
-  Delta += LambdaV[CID] * (CIDNSetV[CID].Len() - 1 - NbhsInC);
+
+  // Delta += LambdaV[CID] * (CIDNSetV[CID].Len() - 1 - NbhsInC);
+  Delta += LambdaV[CID] * (CIDNSetV[CID].Len() - 1);
   return Delta;
 }
 
@@ -624,7 +712,7 @@ double TAGMFit::SeekJoin(const int& UID, const int& CID) const {
      * vertice may be unevenly distributed. Should give each worker
      * enough task(Here: end - start >= 64) to avoid lock contention.
      */
-    const int SliceSize = TMath::Mn(TPOOL_WORKERS * 2, Edges / 64);
+    const int SliceSize = TMath::Mn(TPOOL_WORKERS, Edges / 32);
     const int BatchSize = (Edges + SliceSize - 1) / SliceSize;
     int start = 0, end = BatchSize;
   
@@ -665,6 +753,7 @@ double TAGMFit::SeekJoin(const int& UID, const int& CID) const {
   }
 
   // Delta -= LambdaV[CID] * (CIDNSetV[CID].Len() - NbhsInC);
+  // Delta -= LambdaV[CID] * (CIDNSetV[CID].Len()) - LambdaV[CID] * NbhsInC;
   Delta -= LambdaV[CID] * (CIDNSetV[CID].Len());
   return Delta;
 }

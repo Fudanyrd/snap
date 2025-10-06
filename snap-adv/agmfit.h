@@ -82,7 +82,8 @@ public:
   /// Remove all communities with no members.
   int RemoveEmptyCom();
   /// Compute the change in likelihood (Delta) if node \c UID leaves community \c CID.
-  double SeekLeave(const int& UID, const int& CID);
+  double SeekLeave(const int& UID, const int& CID) const;
+  static void SeekLeaveWorker(void **args);
   /// Compute the change in likelihood (Delta) if node \c UID joins community \c CID.
   double SeekJoin(const int& UID, const int& CID) const;
   static void SeekJoinWorker(void **args);
