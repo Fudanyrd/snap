@@ -49,7 +49,8 @@ public:
   /// Initialize node community memberships using best neighborhood communities (see D. Gleich et al. KDD'12).
   void NeighborComInit(const int InitComs);
   // Gradient of likelihood for \c P_c.
-  void GradLogLForLambda(TFltV& GradV);
+  void GradLogLForLambda(TFltV& GradV) const;
+  static void GradLogLWorker(void **args);
   /// Gradient descent for \c p_c while keeping the community affiliation graph (CAG) fixed.
   int MLEGradAscentGivenCAG(const double& Thres=0.001, const int& MaxIter=10000, const TStr PlotNm = TStr());
   /// Set Epsilon (the probability that two nodes sharing no communities connect) to the default value.

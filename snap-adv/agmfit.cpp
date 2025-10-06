@@ -104,6 +104,8 @@ double TAGMFit::Likelihood(const TFltV& NewLambdaV, double& LEdges, double& LNoE
   IAssert(ComEdgesV.Len() == CIDNSetV.Len());
 
   double Results[TPOOL_WORKERS];
+  int Starts[TPOOL_WORKERS];
+  int Ends[TPOOL_WORKERS];
   LEdges = 0.0; LNoEdges = 0.0;
   const int EdgeComVHLen = this->EdgeComVH.Len() /* = 613 */;
   // for (int e = 0; e < EdgeComVHLen; e++) {
@@ -117,8 +119,6 @@ double TAGMFit::Likelihood(const TFltV& NewLambdaV, double& LEdges, double& LNoE
   // }
   do {
     const int BatchSize = (EdgeComVHLen + TPOOL_WORKERS - 1) / TPOOL_WORKERS;
-    int Starts[TPOOL_WORKERS];
-    int Ends[TPOOL_WORKERS];
 
     for (int t = 0; t < TPOOL_WORKERS; t++) {
       int start = t * BatchSize;
@@ -653,24 +653,80 @@ void TAGMFit::SetCmtyVV(const TVec<TIntV>& CmtyVV) {
   SetDefaultPNoCom();
 }
 
-// Gradient of likelihood for P_c.
-void TAGMFit::GradLogLForLambda(TFltV& GradV) {
-  GradV.Gen(LambdaV.Len());
-  TFltV SumEdgeProbsV(LambdaV.Len());
-  const int EdgeComVHLen = EdgeComVH.Len() /* = 613 */;
-  for (int e = 0; e < EdgeComVHLen; e++) {
-    TIntSet& JointCom = EdgeComVH[e];
-    double LambdaSum = SelectLambdaSum(JointCom);
-    double Puv = 1 - exp(- LambdaSum);
-    if (JointCom.Len() == 0) {  Puv = PNoCom;  }
+void TAGMFit::GradLogLWorker(void **args) {
+  /* Unpack arguments. */
+  const TAGMFit *Self   = (const TAGMFit *) args[0];
+  double *SumEdgeProbsV = (double *)        args[1];
+  const int start       = *((int *)         args[2]);
+  const int end         = *((int *)         args[3]);
+  const int LambdaLen   = *((int *)         args[4]);
+
+  for (int k = 0; k < LambdaLen; k++) { SumEdgeProbsV[k] = 0.0; }
+
+  for (int e = start; e < end; e++) {
+    const TIntSet& JointCom = Self->EdgeComVH[e];
+    double Puv;
+    if (JointCom.Len() == 0) {  Puv = Self->PNoCom;  }
+    else {
+      double LambdaSum = Self->SelectLambdaSum(JointCom);
+      Puv = 1 - exp(- LambdaSum);
+    }
+    const double Inc = (1 - Puv) / Puv;
     for (TIntSet::TIter SI = JointCom.BegI(); SI < JointCom.EndI(); SI++) {
-      SumEdgeProbsV[SI.GetKey()] += (1 - Puv) / Puv;
+      const TInt Key = SI.GetKey();
+      SumEdgeProbsV[Key] += Inc;
     }
   }
+}
 
-  const int LambdaVLen = LambdaV.Len() /* = 23 */;
+// Gradient of likelihood for P_c.
+void TAGMFit::GradLogLForLambda(TFltV& GradV) const {
+  const int LambdaVLen = this->LambdaV.Len() /* = 23 */;
+  GradV.Gen(LambdaVLen);
+  TFltV SumEdgeProbsV(LambdaVLen);
+  const int EdgeComVHLen = this->EdgeComVH.Len() /* = 613 */;
+  // for (int e = 0; e < EdgeComVHLen; e++) {
+  //   const TIntSet& JointCom = EdgeComVH[e];
+  //   double LambdaSum = SelectLambdaSum(JointCom);
+  //   double Puv = 1 - exp(- LambdaSum);
+  //   if (JointCom.Len() == 0) {  Puv = PNoCom;  }
+  //   for (TIntSet::TIter SI = JointCom.BegI(); SI < JointCom.EndI(); SI++) {
+  //     SumEdgeProbsV[SI.GetKey()] += (1 - Puv) / Puv;
+  //   }
+  // }
+  do {
+    const int BatchSize = (EdgeComVHLen + TPOOL_WORKERS - 1) / TPOOL_WORKERS;
+    int Starts[TPOOL_WORKERS], Ends[TPOOL_WORKERS];
+    void *args[5];
+
+    for (int t = 0; t < TPOOL_WORKERS; t++) {
+      Starts[t] = t * BatchSize;
+      Ends[t] = TMath::Mn((t + 1) * BatchSize, EdgeComVHLen);
+      args[0] = (void *) this;
+      double * buf = new double[LambdaVLen];
+      args[1] = (void *) buf;
+      args[2] = (void *) &Starts[t];
+      args[3] = (void *) &Ends[t];
+      args[4] = (void *) &LambdaVLen;
+      memcpy(&taskBuf[t].args, args, sizeof(args));
+      taskBuf[t].routine = TAGMFit::GradLogLWorker;
+      taskBuf[t].finished = 0;
+      tpool.AddTasks(&taskBuf[t], 1);
+    }
+
+    for (int t = 0; t < TPOOL_WORKERS; t++) {
+      taskBuf[t].waitfor();
+
+      const double *buf = (const double *) taskBuf[t].args[1];
+      for (int k = 0; k < LambdaVLen; k++) { SumEdgeProbsV[k] += buf[k]; }
+
+      delete[] buf;
+    }
+  } while (0);
+
   for (int k = 0; k < LambdaVLen; k++) {
-    int MaxEk = CIDNSetV[k].Len() * (CIDNSetV[k].Len() - 1) / 2;
+    const int ComSize = CIDNSetV[k].Len();
+    int MaxEk = ComSize * (ComSize - 1) / 2;
     int NotEdgesInCom = MaxEk - ComEdgesV[k];
     GradV[k] = SumEdgeProbsV[k] - (double) NotEdgesInCom;
     if (LambdaV[k] > 0.0 && RegCoef > 0.0) { //if regularization exists
