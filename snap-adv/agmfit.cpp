@@ -92,8 +92,9 @@ void TAGMFit::LikelihoodWorker(void **args) {
       double LambdaSum = fit->SelectLambdaSum(NewLambdaV, JointCom);
       Puv = 1 - exp(- LambdaSum); 
     }
-    IAssert(! _isnan(log(Puv)));
-    inc += log(Puv);
+    Puv = log(Puv);
+    IAssert(! _isnan(Puv));
+    inc += Puv;
   }
 
   (*dst) += inc;
@@ -108,6 +109,7 @@ double TAGMFit::Likelihood(const TFltV& NewLambdaV, double& LEdges, double& LNoE
   int Ends[TPOOL_TASKS];
   LEdges = 0.0; LNoEdges = 0.0;
   const int EdgeComVHLen = this->EdgeComVH.Len() /* = 613 */;
+  const int SliceSize = TPOOL_WORKERS * 3;
   // for (int e = 0; e < EdgeComVHLen; e++) {
   //   const TIntSet& JointCom = EdgeComVH[e];
   //   double LambdaSum = SelectLambdaSum(NewLambdaV, JointCom);
@@ -118,8 +120,7 @@ double TAGMFit::Likelihood(const TFltV& NewLambdaV, double& LEdges, double& LNoE
   //   LEdges += log(Puv);
   // }
   do {
-    const int SliceSize = TPOOL_WORKERS * 3;
-    const int BatchSize = (EdgeComVHLen + TPOOL_TASKS - 1) / SliceSize;
+    const int BatchSize = (EdgeComVHLen + SliceSize - 1) / SliceSize;
     int start = 0, end = BatchSize;
 
     for (int t = 0; t < SliceSize; t++) {
@@ -158,7 +159,7 @@ double TAGMFit::Likelihood(const TFltV& NewLambdaV, double& LEdges, double& LNoE
 
   /* Wait for workers to complete. */
   tpool.waitForAll();
-  for (int t = 0; t < TPOOL_TASKS; t++) {
+  for (int t = 0; t < SliceSize; t++) {
     LEdges += Results[t];
   }
   return LEdges + LNoEdges + LReg;
@@ -686,15 +687,54 @@ void TAGMFit::GradLogLForLambda(TFltV& GradV) const {
   GradV.Gen(LambdaVLen);
   TFltV SumEdgeProbsV(LambdaVLen);
   const int EdgeComVHLen = this->EdgeComVH.Len() /* = 613 */;
-  for (int e = 0; e < EdgeComVHLen; e++) {
-    const TIntSet& JointCom = EdgeComVH[e];
-    double LambdaSum = SelectLambdaSum(JointCom);
-    double Puv = 1 - exp(- LambdaSum);
-    if (JointCom.Len() == 0) {  Puv = PNoCom;  }
-    for (TIntSet::TIter SI = JointCom.BegI(); SI < JointCom.EndI(); SI++) {
-      SumEdgeProbsV[SI.GetKey()] += (1 - Puv) / Puv;
+  // for (int e = 0; e < EdgeComVHLen; e++) {
+  //   const TIntSet& JointCom = EdgeComVH[e];
+  //   double LambdaSum = SelectLambdaSum(JointCom);
+  //   double Puv = 1 - exp(- LambdaSum);
+  //   if (JointCom.Len() == 0) {  Puv = PNoCom;  }
+  //   for (TIntSet::TIter SI = JointCom.BegI(); SI < JointCom.EndI(); SI++) {
+  //     SumEdgeProbsV[SI.GetKey()] += (1 - Puv) / Puv;
+  //   }
+  // }
+  do {
+    const int SliceSize = TPOOL_WORKERS * 2;
+    const int BatchSize = (EdgeComVHLen + SliceSize - 1) / SliceSize;
+    int Starts[TPOOL_TASKS];
+    int Ends[TPOOL_TASKS];
+    int start = 0;
+    int end = BatchSize;
+    void *args[5];
+
+    for (int t = 0; t < SliceSize; t++) {
+      start = start > EdgeComVHLen ? EdgeComVHLen : start;
+      end = end > EdgeComVHLen ? EdgeComVHLen : end;
+      Starts[t] = start;
+      Ends[t] = end;
+      double *buf = new double[LambdaVLen];
+
+      args[0] = (void *)this;
+      args[1] = (void *)buf;
+      args[2] = (void *)&Starts[t];
+      args[3] = (void *)&Ends[t];
+      args[4] = (void *)&LambdaVLen;
+
+      Task *task = &taskBuf[t];
+      task->routine = TAGMFit::GradLogLWorker;
+      memcpy(task->args, args, sizeof(args));
+      tpool.push(task);
+      start = end; 
+      end += BatchSize;
     }
-  }
+
+    Task *fini;
+    while ((fini = tpool.waitFor()) != (Task *)0) {
+      const double *Sum = (const double *) fini->args[1];
+      for (int k = 0; k < LambdaVLen; k++) {
+        SumEdgeProbsV[k] += Sum[k];
+      }
+      delete[] Sum;
+    }
+  } while (0);
 
   for (int k = 0; k < LambdaVLen; k++) {
     const int ComSize = CIDNSetV[k].Len();
