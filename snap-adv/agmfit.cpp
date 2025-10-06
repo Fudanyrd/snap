@@ -758,6 +758,41 @@ double TAGMFit::SeekJoin(const int& UID, const int& CID) const {
   return Delta;
 }
 
+void TAGMFit::SeekSwitchWorker(void **args) {
+  const TAGMFit *Self = (TAGMFit *)args[0];
+  const int UID = *(int *)args[1];
+  const int CurCID = *(int *)args[2];
+  const int NewCID = *(int *)args[3];
+  double *Delta = (double *)args[4];
+  const unsigned long StartEnd = *(unsigned long *)args[5];
+  const int start = (int)(StartEnd & 0xFFFFFFFF);
+  const int end = (int)(StartEnd >> 32);
+
+  double inc = 0;
+  const double LambdaCurC = Self->LambdaV[CurCID];
+  const double LambdaNewC = Self->LambdaV[NewCID];
+
+  for (int e = start; e < end; e++) {
+    const int VID = Self->G->GetNI(UID).GetNbrNId(e);
+    if (! Self->NIDComVH.GetDat(VID).IsKey(CurCID) || ! Self->NIDComVH.GetDat(VID).IsKey(NewCID)) { continue; }
+    TIntPr SrcDstNIDPr(TMath::Mn(UID,VID), TMath::Mx(UID,VID));
+    const TIntSet& JointCom = Self->EdgeComVH.GetDat(SrcDstNIDPr);
+    double CurPuv, NewPuvAfterJoin, NewPuvAfterLeave, NewPuvAfterSwitch;
+    const double LambdaSum = Self->SelectLambdaSum(JointCom);
+    CurPuv = 1 - exp(- LambdaSum);
+    NewPuvAfterLeave = 1 - exp(- LambdaSum + LambdaCurC);
+    NewPuvAfterJoin = 1 - exp(- LambdaSum - LambdaNewC);
+    NewPuvAfterSwitch = 1 - exp(- LambdaSum - LambdaNewC + LambdaCurC);
+    if (JointCom.Len() == 1 || NewPuvAfterLeave == 0.0) {
+      NewPuvAfterLeave = Self->PNoCom;
+    }
+    inc += (log(NewPuvAfterSwitch) + log(CurPuv) - log(NewPuvAfterLeave) - log(NewPuvAfterJoin));
+    IAssert(!_isnan(inc));
+  }
+
+  (*Delta) += inc;
+}
+
 // Compute the change in likelihood (Delta) if node UID switches from CurCID to NewCID.
 double TAGMFit::SeekSwitch(const int& UID, const int& CurCID, const int& NewCID) {
   IAssert(! CIDNSetV[NewCID].IsKey(UID));
@@ -765,24 +800,68 @@ double TAGMFit::SeekSwitch(const int& UID, const int& CurCID, const int& NewCID)
   double Delta = SeekJoin(UID, NewCID) + SeekLeave(UID, CurCID);
   //correct only for intersection between new com and current com
   TUNGraph::TNodeI NI = G->GetNI(UID);
-  for (int e = 0; e < NI.GetDeg(); e++) {
-    const int VID = NI.GetNbrNId(e);
-    if (! NIDComVH.GetDat(VID).IsKey(CurCID) || ! NIDComVH.GetDat(VID).IsKey(NewCID)) {continue;}
-    TIntPr SrcDstNIDPr(TMath::Mn(UID,VID), TMath::Mx(UID,VID));
-    TIntSet& JointCom = EdgeComVH.GetDat(SrcDstNIDPr);
-    double CurPuv, NewPuvAfterJoin, NewPuvAfterLeave, NewPuvAfterSwitch, LambdaSum = SelectLambdaSum(JointCom);
-    CurPuv = 1 - exp(- LambdaSum);
-    NewPuvAfterLeave = 1 - exp(- LambdaSum + LambdaV[CurCID]);
-    NewPuvAfterJoin = 1 - exp(- LambdaSum - LambdaV[NewCID]);
-    NewPuvAfterSwitch = 1 - exp(- LambdaSum - LambdaV[NewCID] + LambdaV[CurCID]);
-    if (JointCom.Len() == 1 || NewPuvAfterLeave == 0.0) {
-      NewPuvAfterLeave = PNoCom;
+  const int Edges = NI.GetDeg();
+  // for (int e = 0; e < NI.GetDeg(); e++) {
+  //   const int VID = NI.GetNbrNId(e);
+  //   if (! NIDComVH.GetDat(VID).IsKey(CurCID) || ! NIDComVH.GetDat(VID).IsKey(NewCID)) {continue;}
+  //   TIntPr SrcDstNIDPr(TMath::Mn(UID,VID), TMath::Mx(UID,VID));
+  //   TIntSet& JointCom = EdgeComVH.GetDat(SrcDstNIDPr);
+  //   double CurPuv, NewPuvAfterJoin, NewPuvAfterLeave, NewPuvAfterSwitch, LambdaSum = SelectLambdaSum(JointCom);
+  //   CurPuv = 1 - exp(- LambdaSum);
+  //   NewPuvAfterLeave = 1 - exp(- LambdaSum + LambdaV[CurCID]);
+  //   NewPuvAfterJoin = 1 - exp(- LambdaSum - LambdaV[NewCID]);
+  //   NewPuvAfterSwitch = 1 - exp(- LambdaSum - LambdaV[NewCID] + LambdaV[CurCID]);
+  //   if (JointCom.Len() == 1 || NewPuvAfterLeave == 0.0) {
+  //     NewPuvAfterLeave = PNoCom;
+  //   }
+  //   Delta += (log(NewPuvAfterSwitch) + log(CurPuv) - log(NewPuvAfterLeave) - log(NewPuvAfterJoin));
+  //   if (_isnan(Delta)) {
+  //     printf("NS:%f C:%f NL:%f NJ:%f PNoCom:%f", NewPuvAfterSwitch, CurPuv, NewPuvAfterLeave, NewPuvAfterJoin, PNoCom.Val);
+  //   }
+  //   IAssert(!_isnan(Delta));
+  // }
+  if (Edges >= 128) {
+    unsigned long StartEnds[TPOOL_TASKS];
+    double Results[TPOOL_TASKS];
+
+    const int SliceSize = TMath::Mn(TPOOL_WORKERS, Edges / 32);
+    const int BatchSize = (Edges + SliceSize - 1) / SliceSize;
+    int start = 0, end = BatchSize;
+
+    for (int t = 0; t < SliceSize; t++) {
+      start = start > Edges ? Edges : start;
+      end = end > Edges ? Edges : end;
+      Results[t] = 0.0;
+      unsigned long StartEnd = ((unsigned long)start) | ((unsigned long)end << 32);
+      StartEnds[t] = StartEnd;
+
+      void **args = taskBuf[t].args;
+      args[0] = (void *)this;
+      args[1] = (void *)&UID;
+      args[2] = (void *)&CurCID;
+      args[3] = (void *)&NewCID;
+      args[4] = (void *)&Results[t];
+      args[5] = (void *)&StartEnds[t];
+      taskBuf[t].routine = TAGMFit::SeekSwitchWorker;
+      tpool.push(&taskBuf[t]);
+      start = end;
+      end += BatchSize;
     }
-    Delta += (log(NewPuvAfterSwitch) + log(CurPuv) - log(NewPuvAfterLeave) - log(NewPuvAfterJoin));
-    if (_isnan(Delta)) {
-      printf("NS:%f C:%f NL:%f NJ:%f PNoCom:%f", NewPuvAfterSwitch, CurPuv, NewPuvAfterLeave, NewPuvAfterJoin, PNoCom.Val);
+  
+    Task *fini;
+    while ((fini = tpool.waitFor()) != (Task *) 0) {
+      Delta += *(const double *) fini->args[4];
     }
-    IAssert(!_isnan(Delta));
+  } else {
+    void *args[6];
+    unsigned long StartEnd = ((unsigned long)Edges << 32) | (unsigned long)0;
+    args[0] = (void *)this;
+    args[1] = (void *)&UID;
+    args[2] = (void *)&CurCID;
+    args[3] = (void *)&NewCID;
+    args[4] = (void *)&Delta;
+    args[5] = (void *)&StartEnd;
+    SeekSwitchWorker(args);
   }
   return Delta;
 }

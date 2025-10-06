@@ -89,6 +89,7 @@ public:
   static void SeekJoinWorker(void **args);
   // Compute the change in likelihood (Delta) if node \c UID switches from \c CurCID to \c NewCID.
   double SeekSwitch(const int& UID, const int& CurCID, const int& NewCID);
+  static void SeekSwitchWorker(void **args);
   
   /// Step size search for updating P_c (which is parametarized by regularization parameter lambda).
   double GetStepSizeByLineSearchForLambda(const TFltV& DeltaV, const TFltV& GradV, const double& Alpha, const double& Beta);
