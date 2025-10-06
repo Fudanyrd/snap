@@ -84,7 +84,8 @@ public:
   /// Compute the change in likelihood (Delta) if node \c UID leaves community \c CID.
   double SeekLeave(const int& UID, const int& CID);
   /// Compute the change in likelihood (Delta) if node \c UID joins community \c CID.
-  double SeekJoin(const int& UID, const int& CID);
+  double SeekJoin(const int& UID, const int& CID) const;
+  static void SeekJoinWorker(void **args);
   // Compute the change in likelihood (Delta) if node \c UID switches from \c CurCID to \c NewCID.
   double SeekSwitch(const int& UID, const int& CurCID, const int& NewCID);
   
