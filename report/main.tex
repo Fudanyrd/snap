@@ -1,0 +1,27 @@
+\documentclass[]{article}
+\usepackage{amsmath}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+  Stanford Network Analysis Platform (\textbf{SNAP}) is a general purpose, high
+  performance system for analysis and manipulation of large networks.
+  \textbf{SNAP} is written in \texttt{C++} and it scales to massive graphs with hundreds
+  of millions of nodes and billions of edges. However, when applying the \textbf{SNAP}
+  framework to real-world datasets, we found that the performance of \textbf{SNAP}
+  is highly constrained by its single-thread execution. To this end, we have made
+  manual efforts to optimize its scalability and ultimately, its runtime overhead 
+  on various social-network mining tasks. Our methodology includes crating a high-performance 
+  thread pool and utilize it to parallelize computation-intense code. Experimental 
+  results showed that our implementation is \texttt{0.87x} faster on community discovery tasks,
+  and \texttt{FIXME-x} faster for FIXME tasks.
+\end{abstract}
+
+% Code Repository
+\section{Introduction}
+\par Our code is publicly available at \url{https://github.com/Fudanyrd/snap}.
+
+\input{related-work}
+
+\end{document}
