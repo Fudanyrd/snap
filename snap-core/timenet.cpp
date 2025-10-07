@@ -1,3 +1,9 @@
+#ifdef __SNAP_SEPARATE
+#include "ggen.h"
+#include "gstat.h"
+#include "subgraph.h"
+#include "timenet.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Time Network
 TTimeNet& TTimeNet::operator = (const TTimeNet& TimeNet) {

@@ -3,6 +3,11 @@
 #include "stdafx.h"
 #include "Snap.h"
 
+#ifdef __SNAP_SEPARATE
+/* Build as an amalgam. */
+#  undef __SNAP_SEPARATE
+#endif
+
 #include "base.cpp"
 #include "gnuplot.cpp"
 #include "linalg.cpp"

@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+# include "gstat.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Sigle Snapshot Graph Statistics
 int TGStat::NDiamRuns = 10;

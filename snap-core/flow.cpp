@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+#include "flow.h"
+#endif // __SNAP_SEPARATE
 namespace TSnap {
 
 // Returns the NId where the two directions of search meet up, or -1 if no augmenting path exists. ##TSnap::IntFlowBiDBFS

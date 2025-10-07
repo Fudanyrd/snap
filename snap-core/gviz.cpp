@@ -1,3 +1,7 @@
+#ifdef __SNAP_SEPARATE
+
+#include "gviz.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // GraphViz
 namespace TSnap {

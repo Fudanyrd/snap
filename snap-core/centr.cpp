@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+#  include "centr.h"
+#endif // __SNAP_SEPARATE
 namespace TSnap {
 
 /////////////////////////////////////////////////

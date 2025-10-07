@@ -1,3 +1,7 @@
+#ifdef __SNAP_SEPARATE
+#include "gio.h"
+#include "zipfl.h"
+#endif // __SNAP_SEPARATE
 namespace TSnap {
 
 // Reads the schema from the file (that is being parsed), and fills the SrcColId, DstColId, and the vectors with the index,

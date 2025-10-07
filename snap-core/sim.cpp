@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+#  include "sim.h"
+#endif // __SNAP_SEPARATE
 
 float JaccardSim(TNGraph::TNodeI NI1, TNGraph::TNodeI NI2) {
   int lenA = NI1.GetOutDeg();

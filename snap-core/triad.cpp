@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+#include "triad.h"
+#endif // __SNAP_SEPARATE
 namespace TSnap {
 
 #if 0

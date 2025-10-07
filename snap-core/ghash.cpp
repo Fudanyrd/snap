@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+#  include "ghash.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Graph Hash Table Key
 const int TGraphKey::RoundTo = 4; // round to 4 decimal places

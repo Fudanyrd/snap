@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+#include "casc.h"
+#endif // __SNAP_SEPARATE
 namespace TSnap {
 
 PNGraph CascGraphSource(PTable P,const TStr C1,const TStr C2,const TStr C3,const TStr C4,const TInt W) {

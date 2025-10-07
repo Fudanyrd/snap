@@ -3,20 +3,24 @@
 #
 
 include ../Makefile.config
+include src.mk
 
 %.h.gch: %.h
 	@$(CC) $(CXXFLAGS) -D__SNAP_SEPARATE -I$(CGLIB) -I. -o $@ $<
 
-%.o: %.cpp
-	@$(CC) $(CXXFLAGS) -D__SNAP_SEPARATE -I$(CGLIB) -I. -c $< -o $@
+%.o: %.cpp $(LIBSNAP_HXX)
+	@$(CC) $(CXXFLAGS) -I$(CGLIB) -I. -c $< -o $@
 
-all: testSnap
+all: testSnap Snap.o
 
-testSnap: testSnap.cpp Snap.o 
-	$(CC) $(CXXFLAGS) -o testSnap testSnap.cpp Snap.o -I$(CGLIB) $(LDFLAGS) $(LIBS)
+libsnap.a: $(LIBSNAP_OBJS)
+	@echo AR libsnap.a && ar rcs libsnap.a $(LIBSNAP_OBJS)
 
-Snap.o: *.h *.cpp ../glib-core/*.h ../glib-core/*.cpp
-	$(CC) -c $(CXXFLAGS) Snap.cpp -I$(CGLIB)
+testSnap: testSnap.o libsnap.a 
+	$(CC) $(CXXFLAGS) -o testSnap testSnap.o libsnap.a -I$(CGLIB) $(LDFLAGS) $(LIBS)
+
+Snap.o: $(LIBSNAP_CXX) $(LIBSNAP_HXX) Snap.cpp
+	$(CC) -c $(CXXFLAGS) Snap.cpp -I$(CGLIB) -o Snap.o
 
 lib: Snap.o
 	rm -f libsnap.a
@@ -26,5 +30,5 @@ libinstall: lib
 	cp libsnap.a /usr/local/lib/libsnap.a
 
 clean:
-	rm -f *.o *.a testSnap testSnap.exe *.plt *.tab *.png
+	rm -f $(LIBSNAP_OBJS) *.a testSnap testSnap.exe *.plt *.tab *.png
 

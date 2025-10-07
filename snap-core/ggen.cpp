@@ -1,3 +1,8 @@
+#ifdef __SNAP_SEPARATE
+#include "ff.h"
+#include "ggen.h"
+#include "gstat.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Graph Generators
 namespace TSnap {

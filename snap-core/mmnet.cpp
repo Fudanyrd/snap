@@ -1,3 +1,7 @@
+#ifdef __SNAP_SEPARATE
+
+#include "mmnet.h"
+#endif // __SNAP_SEPARATE
 ////////////////////////////////////////////////
 // Mutimodal Network
 TStr TModeNet::GetNeighborCrossName(const TStr& CrossName, bool isOutEdge, const bool sameMode, bool isDir) const {

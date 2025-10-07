@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+# include "statplot.h"
+#endif // __SNAP_SEPARATE
 namespace TSnap {
 
 /////////////////////////////////////////////////

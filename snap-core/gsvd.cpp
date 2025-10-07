@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+#include "gsvd.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Directed Graph Matrix -- sparse {0,1} row matrix 
 bool TNGraphMtx::CheckNodeIds() {

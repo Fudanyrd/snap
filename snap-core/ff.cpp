@@ -1,3 +1,7 @@
+#ifdef __SNAP_SEPARATE
+#include "ff.h"
+#include "gstat.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Forest Fire
 void TForestFire::InfectAll() {

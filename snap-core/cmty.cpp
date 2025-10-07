@@ -1,3 +1,7 @@
+#ifdef __SNAP_SEPARATE
+#include "centr.h"
+#include "cmty.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Community detection algorithms
 namespace TSnap {
