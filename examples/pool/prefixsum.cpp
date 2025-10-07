@@ -47,7 +47,7 @@ static void add_task(void **args) {
 }
 
 int main(int argc, char **argv) {
-  ThreadPool pool;
+  ThreadPool &pool = tpool;
   /* Initialize buffer */
   const int seglen = N / TPOOL_WORKERS;
   for (int i = 0; i < TPOOL_WORKERS; i++) {
