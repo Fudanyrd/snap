@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+#include "xmath.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Mathematical-Utilities
 double TMath::E=2.71828182845904523536;

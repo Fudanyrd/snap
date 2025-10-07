@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+#include "wch.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Wide-Char
 const TWCh TWCh::Mn(0, 0);

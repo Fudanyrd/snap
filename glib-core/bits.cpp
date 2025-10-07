@@ -1,3 +1,8 @@
+
+#ifdef __SNAP_SEPARATE
+#  include "bits.h"
+#endif // __SNAP_SEPARATE
+
 /////////////////////////////////////////////////
 // One byte
 const int TB1Def::B1Bits=8;

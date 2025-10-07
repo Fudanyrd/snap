@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+#include "xmlser.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Xml-Object-Saving
 TStrStrH TXmlObjSer::TypeNmToTagNmH;

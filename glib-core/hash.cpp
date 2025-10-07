@@ -1,3 +1,7 @@
+#ifdef __SNAP_SEPARATE
+#include "md5.h"
+#include "hash.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Big-String-Pool
 void TBigStrPool::Resize(TSize _MxBfL) {

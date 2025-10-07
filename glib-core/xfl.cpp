@@ -1,3 +1,7 @@
+#ifdef __SNAP_SEPARATE
+#include "os.h"
+#include "xfl.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Find-File-Descriptor
 #ifdef GLib_WIN

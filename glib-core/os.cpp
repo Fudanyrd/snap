@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+#include "os.h"
+#endif // __SNAP_SEPARATE
 #ifdef GLib_WIN
 
 /////////////////////////////////////////////////

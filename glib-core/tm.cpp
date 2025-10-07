@@ -1,3 +1,8 @@
+#ifdef __SNAP_SEPARATE
+#include "lx.h"
+#include "os.h"
+#include "tm.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Time-Names
 bool TTmInfo::InitP=false;

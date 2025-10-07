@@ -1,6 +1,9 @@
 // Unicode.cpp : Defines the entry point for the console application.
 //
 
+#ifdef __SNAP_SEPARATE
+#include "unicode.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Includes
 //#include "unicode.h"

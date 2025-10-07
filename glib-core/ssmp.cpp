@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+#include "ssmp.h"
+#endif // __SNAP_SEPARATE
 //#//////////////////////////////////////////////
 
 TSsParserMP::TSsParserMP(const TStr& FNm, const char& Separator, const bool& _SkipLeadBlanks, const bool& _SkipCmt, const bool& _SkipEmptyFld) : SsFmt(ssfSpaceSep), 

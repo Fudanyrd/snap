@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+#include "env.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Environment
 TEnv::TEnv(const int& _Args, char** _ArgV, const PNotify& _Notify):

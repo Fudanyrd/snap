@@ -76,6 +76,8 @@ int gettimeofday(struct timeval *tp, void *tzp)
 }
 #endif
 
+#ifndef __SNAP_SEPARATE
+
 #include "bd.cpp"
 #include "fl.cpp"
 #include "dt.cpp"
@@ -108,3 +110,5 @@ int gettimeofday(struct timeval *tp, void *tzp)
 
 #include "zipfl.cpp"
 
+
+#endif // __SNAP_SEPARATE

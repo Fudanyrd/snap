@@ -1,3 +1,7 @@
+#ifdef __SNAP_SEPARATE
+#include "http.h"
+#include "url.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Url-Lexical-Chars
 class TUrlLxChDef{

@@ -1,3 +1,7 @@
+#ifdef __SNAP_SEPARATE
+#include "ss.h"
+#include "zipfl.h"
+#endif // __SNAP_SEPARATE
 //#//////////////////////////////////////////////
 // Spread-Sheet
 TStr& TSs::At(const int& X, const int& Y){

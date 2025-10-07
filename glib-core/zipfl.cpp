@@ -1,3 +1,7 @@
+#ifdef __SNAP_SEPARATE
+#include "zipfl.h"
+#endif // __SNAP_SEPARATE
+
 /////////////////////////////////////////////////
 // ZIP Input-File
 

@@ -1,3 +1,7 @@
+#ifdef __SNAP_SEPARATE
+#include "os.h"
+#include "xfl.h"
+#endif // __SNAP_SEPARATE
 #ifdef GLib_LINUX
 extern "C" {
 	#include <sys/mman.h>
@@ -1210,7 +1214,8 @@ void TFile::Copy(const TStr& SrcFNm, const TStr& DstFNm,
 
 	filesize = lseek(input, 0, SEEK_END);
 	lseek(output, filesize - 1, SEEK_SET);
-	write(output, '\0', 1);
+  const char nullb = '\0';
+	write(output, &nullb, 1);
 
 	if((source = mmap(0, filesize, PROT_READ, MAP_SHARED, input, 0)) == (void *) -1) {
 		close(input);

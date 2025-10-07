@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+#include "http.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Http-General
 

@@ -1,3 +1,14 @@
+#ifdef __SNAP_SEPARATE
+#include "bits.h"
+#include "ds.h"
+#include "dt.h"
+#include "hash.h"
+#include "lx.h"
+#include "os.h"
+#include "xfl.h"
+#include "xmath.h"
+#include "xmlser.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Random
 const int TRnd::RndSeed=0;

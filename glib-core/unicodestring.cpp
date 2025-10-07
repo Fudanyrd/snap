@@ -1,3 +1,7 @@
+#ifdef __SNAP_SEPARATE
+#include "os.h"
+#include "unicodestring.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Unicode-Definition
 

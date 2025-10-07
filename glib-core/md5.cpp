@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+#include "md5.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // MD5
 void TMd5::Init(){

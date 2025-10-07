@@ -2,6 +2,12 @@
 #include <execinfo.h>
 #endif
 
+#ifdef __SNAP_SEPARATE
+#  include "glib-config.h"
+#  include "bd.h"
+#  include "os.h"
+#endif // __SNAP_SEPARATE
+
 /////////////////////////////////////////////////
 // Mathmatical-Errors
 #if defined(__GNUC__) && (__GNUC__ >= 6)

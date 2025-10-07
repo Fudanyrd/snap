@@ -1,3 +1,8 @@
+#ifdef __SNAP_SEPARATE
+#  include "lx.h"
+#  include "json.h"
+#  include "unicodestring.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Json-Value
 TJsonVal::TJsonVal(TSIn& SIn):

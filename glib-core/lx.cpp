@@ -1,3 +1,7 @@
+#ifdef __SNAP_SEPARATE
+#include "lx.h"
+#include "xml.h"
+#endif // __SNAP_SEPARATE
 ////////////////////////////////////////////////
 // Lexical-Chars
 void TLxChDef::SetUcCh(const TStr& Str){

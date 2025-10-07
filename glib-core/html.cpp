@@ -1,3 +1,7 @@
+#ifdef __SNAP_SEPARATE
+# include "html.h"
+# include "xml.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Html-Lexical-Chars
 void THtmlLxChDef::SetUcCh(const char& UcCh, const char& LcCh){

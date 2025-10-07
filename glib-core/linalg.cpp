@@ -1,3 +1,9 @@
+#ifdef __SNAP_SEPARATE
+#include "linalg.h"
+#include "lx.h"
+#include "xfl.h"
+#include "xmath.h"
+#endif // __SNAP_SEPARATE
 ///////////////////////////////////////////////////////////////////////
 // Sparse-Column-Matrix
 void TSparseColMatrix::PMultiply(const TFltVV& B, int ColId, TFltV& Result) const {

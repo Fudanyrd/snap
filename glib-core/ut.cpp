@@ -1,3 +1,7 @@
+#ifdef __SNAP_SEPARATE
+#include "tm.h"
+#include "ut.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Notifications
 void TNotify::OnNotifyFmt(const TNotifyType& Type, const char *FmtStr, ...) {

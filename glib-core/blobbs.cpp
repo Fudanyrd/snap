@@ -1,3 +1,11 @@
+#ifdef __SNAP_SEPARATE
+#include "bits.h"
+#include "blobbs.h"
+#include "ds.h"
+#include "fl.h"
+#include "lx.h"
+#endif // __SNAP_SEPARATE
+
 /////////////////////////////////////////////////
 // Blob-Pointer
 const int TBlobPt::Flags=24;
