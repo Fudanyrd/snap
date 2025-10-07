@@ -1,3 +1,10 @@
+#ifndef snap_centr_h
+#define snap_centr_h 1
+
+#include "glib-config.h"
+#include "gstat.h"
+#include "table.h"
+
 namespace TSnap {
 
 /////////////////////////////////////////////////
@@ -660,3 +667,5 @@ void MapHits(const TVec<PGraph>& GraphSeq, TVec<PTable>& TableSeq,
 
 }; // namespace TSnap
 
+
+#endif // snap_centr_h 1

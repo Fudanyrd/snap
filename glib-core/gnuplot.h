@@ -4,6 +4,11 @@
 #ifndef gnuplot_h
 #define gnuplot_h
 
+#include "shash.h"
+#include "ss.h"
+#include "ut.h"
+#include "xmath.h"
+
 /////////////////////////////////////////////////
 // GNU-Plot-Chart
 typedef enum {

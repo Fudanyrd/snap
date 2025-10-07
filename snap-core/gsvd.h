@@ -1,3 +1,10 @@
+#ifndef snap_gsvd_h
+#define snap_gsvd_h 1
+
+#include "glib-config.h"
+#include "alg.h"
+#include "linalg.h"
+
 //#//////////////////////////////////////////////
 /// Directed Graph Adjacency Matrix represented as sparse {0,1} row matrix.
 /// The class is used for computing spectral properties of graph adjacency matrices.
@@ -74,3 +81,5 @@ double GetInvParticipRatEig(const TFltV& EigVec);
 } // namespace TSnapDetail
 
 }; // namespace TSnap
+
+#endif // snap_gsvd_h 1

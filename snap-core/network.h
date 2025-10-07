@@ -1,3 +1,10 @@
+#ifndef snap_network_h
+#define snap_network_h 1
+
+#include "glib-config.h"
+#include "attr.h"
+#include "graphmp.h"
+
 #ifndef NETWORK_H
 #define NETWORK_H
 
@@ -4130,3 +4137,5 @@ namespace TSnap {
 template <> struct IsDirected<TDirNet> { enum { Val = 1 }; };
 }
 #endif // NETWORK_H
+
+#endif // snap_network_h 1

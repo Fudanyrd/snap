@@ -1,3 +1,8 @@
+#ifdef __SNAP_SEPARATE
+#include "tm.h"
+#include "gbase.h"
+#endif // __SNAP_SEPARATE
+
 /////////////////////////////////////////////////
 // Graph Base
 namespace TSnap {

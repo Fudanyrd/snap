@@ -1,3 +1,8 @@
+#ifndef snap_sim_h
+#define snap_sim_h 1
+
+#include "glib-config.h"
+#include "table.h"
 
 #ifndef SIM_H
 
@@ -17,3 +22,5 @@ PNEANet KNNJaccardParallel(PNGraph Graph,int K);
 #endif
 
 #endif
+
+#endif // snap_sim_h 1

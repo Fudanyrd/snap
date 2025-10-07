@@ -1,3 +1,9 @@
+#ifndef snap_timenet_h
+#define snap_timenet_h 1
+
+#include "glib-config.h"
+#include "network.h"
+
 ////////////////////////////////////////////////
 // Forward declarations
 class TGrowthStat;
@@ -134,3 +140,5 @@ template <> struct IsDirected<TTimeNENet> { enum { Val = 1 }; };
 template <> struct IsNodeDat<TTimeNENet> { enum { Val = 1 }; };
 template <> struct IsEdgeDat<TTimeNENet> { enum { Val = 1 }; };
 }
+
+#endif // snap_timenet_h 1

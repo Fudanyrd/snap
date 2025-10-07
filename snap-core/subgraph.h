@@ -1,3 +1,11 @@
+#ifndef snap_subgraph_h
+#define snap_subgraph_h 1
+
+#include "glib-config.h"
+#include "attr.h"
+#include "ds.h"
+#include "networkmp.h"
+
 /*! \file subgraph.h
     \brief Functions and templates to generate subgraphs.
 */
@@ -694,3 +702,5 @@ PGraph GetGraphUnion(PGraph& DstGraph, const PGraph& SrcGraph) {
 }
 
 } // namespace TSnap
+
+#endif // snap_subgraph_h 1

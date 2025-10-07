@@ -1,3 +1,10 @@
+#ifndef snap_ggen_h
+#define snap_ggen_h 1
+
+#include "glib-config.h"
+#include "graph.h"
+#include "xmath.h"
+
 // TODO ROK, Jure included basic documentation, finalize reference doc
 
 /////////////////////////////////////////////////
@@ -265,3 +272,5 @@ TIntPr GetRndEdgeNonAdjNode(const PGraph& Graph, int NId1, int NId2) {
 } // namespace TSnapDetail
 
 }; // namespace TSnap
+
+#endif // snap_ggen_h 1

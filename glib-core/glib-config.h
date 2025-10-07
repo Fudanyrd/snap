@@ -1,6 +1,9 @@
 #ifndef glib_config_h
 #define glib_config_h
 
+/// ##mainpage
+#define _USE_MATH_DEFINES    // to use cmath's constants for VS
+
 /////////////////////////////////////////////////
 // Environment defines
 #if defined (_WIN32)

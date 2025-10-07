@@ -1,3 +1,7 @@
+#ifdef __SNAP_SEPARATE
+#include "ssmp.h"
+#include "table.h"
+#endif // __SNAP_SEPARATE
 void TPredicateNode::GetVariables(TStrV& Variables) {
   if (Left != NULL) { Left->GetVariables(Variables); }
   if (Right != NULL) { Right->GetVariables(Variables); }

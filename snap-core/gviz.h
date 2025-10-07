@@ -1,3 +1,8 @@
+#ifndef snap_gviz_h
+#define snap_gviz_h 1
+
+#include "glib-config.h"
+#include "gio.h"
 //#//////////////////////////////////////////////
 /// GraphViz Layout Engines
 typedef enum TGVizLayout_ { gvlDot, gvlNeato, gvlTwopi, gvlCirco, gvlSfdp } TGVizLayout;
@@ -37,3 +42,5 @@ void DrawGViz(const PGraph& Graph, const TGVizLayout& Layout, const TStr& PltFNm
 }
 
 } // namespace TSNap
+
+#endif // snap_gviz_h 1

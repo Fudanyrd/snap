@@ -1,3 +1,10 @@
+#ifndef snap_graph_h
+#define snap_graph_h 1
+
+#include "glib-config.h"
+
+#include "gbase.h"
+
 //#//////////////////////////////////////////////
 /// Undirected graphs
 
@@ -956,3 +963,5 @@ namespace TSnap {
 template <> struct IsBipart<TBPGraph> { enum { Val = 1 }; };
 }
 
+
+#endif // snap_graph_h 1

@@ -1,3 +1,9 @@
+#ifndef snap_cmty_h
+#define snap_cmty_h 1
+
+#include "glib-config.h"
+#include "cncom.h"
+
 namespace TSnap {
 
 /////////////////////////////////////////////////
@@ -91,3 +97,5 @@ void GetEdgesInOut(const PGraph& Graph, const TIntV& NIdV, int& EdgesIn, int& Ed
 }
 
 }; // namespace TSnap
+
+#endif // snap_cmty_h 1

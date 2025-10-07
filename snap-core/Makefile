@@ -4,6 +4,12 @@
 
 include ../Makefile.config
 
+%.h.gch: %.h
+	@$(CC) $(CXXFLAGS) -D__SNAP_SEPARATE -I$(CGLIB) -I. -o $@ $<
+
+%.o: %.cpp
+	@$(CC) $(CXXFLAGS) -D__SNAP_SEPARATE -I$(CGLIB) -I. -c $< -o $@
+
 all: testSnap
 
 testSnap: testSnap.cpp Snap.o 

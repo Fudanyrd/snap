@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+#  include "attr.h"
+#endif // __SNAP_SEPARATE
 // Add functions
 int TAttr::AddSAttrDat(const TInt& Id, const TStr& AttrName, const TInt& Val) {
   TInt AttrId;

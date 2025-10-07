@@ -1,3 +1,9 @@
+#ifndef snap_bignet_h
+#define snap_bignet_h 1
+
+#include "glib-config.h"
+#include "network.h"
+
 //#//////////////////////////////////////////////
 /// Big Network. ##Big_network
 template <class TNodeData, bool IsDir>
@@ -1096,3 +1102,5 @@ void TBigNet<TNodeData, IsDir>::SaveToDisk(const TStr& InFNm, const TStr& OutFNm
     FailR("Not implemented");
   } }
 }
+
+#endif // snap_bignet_h 1

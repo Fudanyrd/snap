@@ -1,3 +1,11 @@
+#ifndef snap_statplot_h
+#define snap_statplot_h 1
+
+#include "glib-config.h"
+#include "bfsdfs.h"
+#include "gstat.h"
+#include "gviz.h"
+
 namespace TSnap {
 
 /////////////////////////////////////////////////
@@ -187,3 +195,5 @@ void PlotKCoreEdges(const PGraph& Graph, const TStr& FNmPref, TStr DescStr) {
 
 
 } // namespace TSnap
+
+#endif // snap_statplot_h 1

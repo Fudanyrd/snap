@@ -1,3 +1,11 @@
+#ifndef snap_bfsdfs_h
+#define snap_bfsdfs_h 1
+
+#include "glib-config.h"
+#include "anf.h"
+#include "network.h"
+#include "subgraph.h"
+
 namespace TSnap {
 
 /////////////////////////////////////////////////
@@ -575,3 +583,5 @@ int GetShortestDistancesMP2(const PGraph& Graph, const int& StartNId, const bool
 #endif // USE_OPENMP
 
 } // namespace TSnap
+
+#endif // snap_bfsdfs_h 1

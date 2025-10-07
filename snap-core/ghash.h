@@ -1,3 +1,12 @@
+#ifndef snap_ghash_h
+#define snap_ghash_h 1
+
+#include "glib-config.h"
+#include "alg.h"
+#include "ds.h"
+#include "hashmp.h"
+#include "gviz.h"
+
 //#//////////////////////////////////////////////
 /// Small Directed Graphs. ##TGraphKey
 class TGraphKey {
@@ -487,3 +496,5 @@ public:
 };
 
 
+
+#endif // snap_ghash_h 1

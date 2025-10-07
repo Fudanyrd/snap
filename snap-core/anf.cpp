@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+#include "anf.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Approximate Neighborhood Function
 namespace TSnap {

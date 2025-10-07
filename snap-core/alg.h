@@ -1,3 +1,11 @@
+#ifndef snap_alg_h
+#define snap_alg_h 1
+
+#include "glib-config.h"
+
+#include "cncom.h"
+#include "subgraph.h"
+
 namespace TSnap {
 
 /////////////////////////////////////////////////
@@ -542,3 +550,5 @@ void GetTreeSig(const PGraph& Graph, const int& RootNId, TIntV& Sig, TIntPrV& No
 }
 
 }; // namespace TSnap
+
+#endif // snap_alg_h 1

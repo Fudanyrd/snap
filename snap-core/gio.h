@@ -1,3 +1,9 @@
+#ifndef snap_gio_h
+#define snap_gio_h 1
+
+#include "glib-config.h"
+#include "network.h"
+
 /////////////////////////////////////////////////
 // Loading and saving graphs from/to various file formats.
 namespace TSnap {
@@ -418,3 +424,5 @@ void SaveGViz(const PGraph& Graph, const TStr& OutFNm, const TStr& Desc, const T
 }
 
 } // namespace TSnap
+
+#endif // snap_gio_h 1

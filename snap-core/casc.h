@@ -1,3 +1,10 @@
+#ifndef snap_casc_h
+#define snap_casc_h 1
+
+#include "glib-config.h"
+#include "network.h"
+#include "table.h"
+
 namespace TSnap {
 /// Takes as input the column names of the PTable \c P as \c C1, \c C2,\c C3 and \c C4 and returns a directed graph of \c W-adjacent events. For graph generation events are sorted by \c C1. 
 PNGraph CascGraphSource(PTable P,const TStr C1,const TStr C2,const TStr C3,const TStr C4,const TInt W);
@@ -12,3 +19,5 @@ void CascFind(PNGraph Graph,PTable P,const TStr C1,const TStr C2,const TStr C3,c
 void CascFindMP(PNGraph Graph,PTable P,const TStr C1,const TStr C2,const TStr C3,const TStr C4,TVec<TIntV> &TopCascVV);
 #endif
 }
+
+#endif // snap_casc_h 1

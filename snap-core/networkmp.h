@@ -1,3 +1,9 @@
+#ifndef snap_networkmp_h
+#define snap_networkmp_h 1
+
+#include "glib-config.h"
+#include "network.h"
+
 #ifndef NETWORKMP_H
 #define NETWORKMP_H
 
@@ -673,3 +679,5 @@ template <> struct IsDirected<TNEANetMP> { enum { Val = 1 }; };
 #endif // GCC_ATOMIC
 
 #endif // NETWORKMP_H
+
+#endif // snap_networkmp_h 1

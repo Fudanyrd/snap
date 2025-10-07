@@ -1,4 +1,11 @@
+#ifndef snap_ff_h
+#define snap_ff_h 1
+
+#include "glib-config.h"
 #include "bd.h"
+#include "ggen.h"
+#include "timenet.h"
+#include "util.h"
 
 //#//////////////////////////////////////////////
 /// Simulates a single Forest Fire on a directed graph starting for a given starting node.
@@ -146,3 +153,5 @@ public:
   TFfGGen::TStopReason AddNodes(const int& GraphNodes, const bool& FloodStop=true);
 };
 
+
+#endif // snap_ff_h 1

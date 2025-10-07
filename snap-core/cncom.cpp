@@ -1,3 +1,7 @@
+#ifdef __SNAP_SEPARATE
+
+#include "cncom.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Connected Components
 void TCnCom::Dump(const TCnComV& CnComV, const TStr& Desc) {

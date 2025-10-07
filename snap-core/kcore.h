@@ -1,3 +1,9 @@
+#ifndef snap_kcore_h
+#define snap_kcore_h 1
+
+#include "glib-config.h"
+#include "subgraph.h"
+
 // TODO ROK, Jure included basic documentation, finalize reference doc
 
 //#//////////////////////////////////////////////
@@ -134,3 +140,5 @@ int GetKCoreEdges(const PGraph& Graph, TIntPrV& CoreIdSzV) {
 }
 
 } // namespace TSnap
+
+#endif // snap_kcore_h 1

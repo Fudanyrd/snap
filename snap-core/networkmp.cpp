@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+#  include "networkmp.h"
+#endif // __SNAP_SEPARATE
 #ifdef GCC_ATOMIC
 
 /////////////////////////////////////////////////

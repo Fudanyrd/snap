@@ -1,3 +1,8 @@
+#ifndef snap_numpy_h
+#define snap_numpy_h 1
+
+#include "glib-config.h"
+#include "ds.h"
 #ifndef NUMPY_H
 #define NUMPY_H
 
@@ -13,3 +18,5 @@ namespace TSnap {
 }
 
 #endif //NUMPY_H
+
+#endif // snap_numpy_h 1

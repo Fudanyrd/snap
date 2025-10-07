@@ -1,3 +1,13 @@
+#ifndef snap_table_h
+#define snap_table_h 1
+
+#include "glib-config.h"
+#include "attr.h"
+#include "ds.h"
+#include "gbase.h"
+#include "hashmp.h"
+#include "mmnet.h"
+
 #ifndef TABLE_H
 #define TABLE_H
 
@@ -1586,3 +1596,5 @@ void TTable::RegisterGrouping(const T& Grouping, const TStr& GroupByCol, TBool U
 
 #endif //TABLE_H
 
+
+#endif // snap_table_h 1

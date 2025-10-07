@@ -1,3 +1,15 @@
+#ifndef snap_attr_h
+#define snap_attr_h 1
+
+#include "glib-config.h"
+
+#include "bits.h"
+#include "ds.h"
+#include "dt.h"
+#include "gbase.h"
+#include "tm.h"
+#include "util.h"
+
 typedef TPair<TStr, TAttrType> TAttrPr;
 typedef TVec<TAttrPr> TAttrPrV;
 
@@ -175,3 +187,5 @@ public:
   /// Given the attribute id \c AttrId, get the attribute name and type.
   int GetSAttrName(const TInt& AttrId, TStr& NameX, TAttrType& AttrTypeX) const;
 };
+
+#endif // snap_attr_h 1

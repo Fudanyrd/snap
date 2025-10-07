@@ -1,3 +1,14 @@
+#ifdef __SNAP_SEPARATE
+#include "bits.h"
+#include "ds.h"
+#include "hashmp.h"
+#include "shash.h"
+#include "tm.h"
+#include "url.h"
+#include "util.h"
+#include "xml.h"
+#endif // __SNAP_SEPARATE
+
 /////////////////////////////////////////////////
 // Graph Utilities
 void TGUtil::GetCdf(const TIntPrV& PdfV, TIntPrV& CdfV) {
@@ -322,7 +333,10 @@ bool TStrUtil::GetNormalizedUrl(const TChA& UrlIn, const TChA& BaseUrl, TChA& Ur
   }
   // http://www. --> http://
   if (UrlOut.IsPrefix("http://www.")) {
-    UrlOut = TChA("http://") + UrlOut.GetSubStr(11, TInt::Mx);
+    TChA Scheme = TChA("http://");
+    TChA Inc = UrlOut.GetSubStr(11, TInt::Mx);
+    UrlOut = Scheme;
+    UrlOut += Inc;
   }
   UrlOut.ToLc();
   return true;
@@ -698,19 +712,32 @@ void TStrUtil::GetStdNameV(TStr AuthorNames, TStrV& StdNameV) {
 ////////////////////////////////////////////////
 /// Routines to benchmark table operations
 
-double TStopwatch::Tick() {
-  //return clock() / ((double)CLOCKS_PER_SEC);
-#ifdef USE_OPENMP
-  return omp_get_wtime();
-#else
-#ifdef GLib_WIN32
-  return GetTickCount() / 1000.0;
-#else
-  struct rusage rusage;
-  getrusage(RUSAGE_SELF, &rusage);
-
-  float cputime =
-  ((float) (rusage.ru_utime.tv_usec + rusage.ru_stime.tv_usec) / 1000000) +
+double TStopwatch::Tick() {
+
+  //return clock() / ((double)CLOCKS_PER_SEC);
+
+#ifdef USE_OPENMP
+
+  return omp_get_wtime();
+
+#else
+
+#ifdef GLib_WIN32
+
+  return GetTickCount() / 1000.0;
+
+#else
+
+  struct rusage rusage;
+
+  getrusage(RUSAGE_SELF, &rusage);
+
+
+
+  float cputime =
+
+  ((float) (rusage.ru_utime.tv_usec + rusage.ru_stime.tv_usec) / 1000000) +
+
   ((float) (rusage.ru_utime.tv_sec + rusage.ru_stime.tv_sec));
   return cputime;
 #endif

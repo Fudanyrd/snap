@@ -1,3 +1,9 @@
+#ifndef snap_triad_h
+#define snap_triad_h 1
+
+#include "glib-config.h"
+#include "subgraph.h"
+
 #ifndef TRIAD_H
 #define TRIAD_H
 
@@ -922,3 +928,5 @@ void TNetConstraint<PGraph>::Test() {
 
 #endif // TRIAD_H
 
+
+#endif // snap_triad_h 1

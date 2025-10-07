@@ -1,3 +1,9 @@
+#ifndef snap_randwalk_h
+#define snap_randwalk_h 1
+
+#include "glib-config.h"
+#include "networkmp.h"
+
 //
 //  randwalk.h
 //  snap-core
@@ -147,3 +153,5 @@ template <class PGraph>
 }; // namespace TSnap
 
 #endif
+
+#endif // snap_randwalk_h 1

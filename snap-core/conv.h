@@ -1,3 +1,9 @@
+#ifndef snap_conv_h
+#define snap_conv_h 1
+
+#include "glib-config.h"
+#include "table.h"
+
 #ifndef CONV_H
 #define CONV_H
 
@@ -2523,3 +2529,5 @@ inline PGraphMP ToNetworkMP(PTable Table,
 
 #endif // CONV_H
 
+
+#endif // snap_conv_h 1

@@ -1,3 +1,7 @@
+#ifdef __SNAP_SEPARATE
+#  include "graph.h"
+#  include "xmath.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Undirected Graph
 bool TUNGraph::HasFlag(const TGraphFlag& Flag) const {

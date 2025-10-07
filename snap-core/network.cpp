@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+#include "network.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 void TNEANet::LoadNetworkShM(TShMIn& ShMIn) {
   MxNId = TInt(ShMIn);

@@ -1,3 +1,13 @@
+#ifndef snap_graphmp_h
+#define snap_graphmp_h 1
+
+#include "glib-config.h"
+
+#include "graph.h"
+#include "hashmp.h"
+#include "tm.h"
+#include "util.h"
+
 #ifndef GRAPHMP_H
 #define GRAPHMP_H
 
@@ -239,3 +249,5 @@ template <> struct IsDirected<TNGraphMP> { enum { Val = 1 }; };
 
 #endif // GRAPHMP_H
 
+
+#endif // snap_graphmp_h 1

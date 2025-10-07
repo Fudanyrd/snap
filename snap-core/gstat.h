@@ -1,3 +1,13 @@
+#ifndef snap_gstat_h
+#define snap_gstat_h 1
+
+#include "glib-config.h"
+#include "alg.h"
+#include "anf.h"
+#include "bfsdfs.h"
+#include "gsvd.h"
+#include "triad.h"
+
 /////////////////////////////////////////////////
 // Graph Statistics
 // statistics of a single snapshot of a graph
@@ -469,3 +479,5 @@ void TGStat::TakeTriadPart(const PGraph& Graph) {
   }
   printf("[%s]  ", ExeTm.GetTmStr());
 }
+
+#endif // snap_gstat_h 1

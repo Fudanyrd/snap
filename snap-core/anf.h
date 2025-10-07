@@ -1,3 +1,8 @@
+#ifndef snap_anf_h
+#define snap_anf_h 1
+
+#include "glib-config.h"
+#include "networkmp.h"
 /////////////////////////////////////////////////
 // Approximate Neighborhood Function.
 namespace TSnap {
@@ -294,3 +299,5 @@ template <class PGraph> void TestAnf() {
 }
 
 } // namespace TSnap
+
+#endif // snap_anf_h 1

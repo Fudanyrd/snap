@@ -1,3 +1,9 @@
+#ifndef snap_cncom_h
+#define snap_cncom_h 1
+
+#include "glib-config.h"
+#include "subgraph.h"
+
 /////////////////////////////////////////////////
 // Connected Components
 class TCnCom;
@@ -466,3 +472,5 @@ PGraph GetMxBiCon(const PGraph& Graph) {
 }
 
 } // namespace TSnap
+
+#endif // snap_cncom_h 1

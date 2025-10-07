@@ -1,3 +1,9 @@
+#ifndef snap_gbase_h
+#define snap_gbase_h 1
+
+#include "glib-config.h"
+#include "hash.h"
+
 /////////////////////////////////////////////////
 // Defines
 #define Kilo(n) (1000*(n))
@@ -348,3 +354,5 @@ void THeap<TVal, TCmp>::MakeHeap(const int& First, const int& Len) {
   }
 }
 
+
+#endif // snap_gbase_h 1

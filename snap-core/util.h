@@ -1,3 +1,11 @@
+#ifndef snap_util_h
+#define snap_util_h 1
+
+#include "glib-config.h"
+#include "gnuplot.h"
+#include "ds.h"
+#include "hash.h"
+
 //#//////////////////////////////////////////////
 /// Graph Utilities
 class TGUtil {
@@ -195,3 +203,5 @@ int64 SendVec64(const TVec< TVec< TVal, TSizeTy > , TSizeTy >&Vec64, int FileDes
   return l;
 }
 #endif
+
+#endif // snap_util_h 1

@@ -1,3 +1,9 @@
+#ifndef snap_mmnet_h
+#define snap_mmnet_h 1
+
+#include "glib-config.h"
+#include "networkmp.h"
+
 #ifndef MMNET_H
 #define MMNET_H
 
@@ -681,3 +687,5 @@ template <> struct IsMultiGraph<TModeNet> { enum { Val = 1 }; };
 template <> struct IsDirected<TModeNet> { enum { Val = 1 }; };
 }
 #endif // MMNET_H
+
+#endif // snap_mmnet_h 1

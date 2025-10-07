@@ -1,3 +1,7 @@
+#ifdef __SNAP_SEPARATE
+#include "graphmp.h"
+#endif // __SNAP_SEPARATE
+
 /////////////////////////////////////////////////
 #ifdef GCC_ATOMIC
 

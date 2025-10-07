@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+#include "conv.h"
+#endif // __SNAP_SEPARATE
 /////////////////////////////////////////////////
 // Conversion Functions
 namespace TSnap {

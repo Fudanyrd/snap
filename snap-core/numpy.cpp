@@ -1,3 +1,6 @@
+#ifdef __SNAP_SEPARATE
+# include "numpy.h"
+#endif // __SNAP_SEPARATE
 namespace TSnap {
 /// Fills the numpyvec array with TIntV vector values. 
 /// Note that only the first n values are filled. 

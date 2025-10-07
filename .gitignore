@@ -2,7 +2,7 @@
 .DS_Store
 
 # Visual Studio
-
+.vscode
 *.vcxproj
 .gdbinit
 
@@ -20,7 +20,11 @@ build/
 # Compiler-generated files
 *.o
 *.dSYM/
+*.a
+*.h.gch
 *.pyc
+snap-core/src.mk
+glib-core/src.mk
 perf.data
 perf.data.old
 
