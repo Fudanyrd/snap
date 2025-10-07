@@ -1,4 +1,5 @@
 #ifdef __SNAP_SEPARATE
+#  include "conv.h"
 #  include "sim.h"
 #endif // __SNAP_SEPARATE
 

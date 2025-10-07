@@ -5,9 +5,12 @@
 all: $(MAIN)
 
 # COMPILE
-$(MAIN): $(MAIN).cpp $(DEPH) $(DEPCPP) $(EXSNAP)/Snap.o 
-	$(CC) $(CXXFLAGS) -o $(MAIN) $(MAIN).cpp $(DEPCPP) $(EXSNAP)/Snap.o -I$(EXSNAP) -I$(EXSNAPADV) -I$(EXGLIB) -I$(EXSNAPEXP) $(LDFLAGS) $(LIBS)
+$(MAIN): $(MAIN).cpp $(DEPH) $(DEPCPP) $(EXSNAP)/libsnap.a 
+	$(CC) $(CXXFLAGS) -o $(MAIN) $(MAIN).cpp $(DEPCPP) $(EXSNAP)/libsnap.a -I$(EXSNAP) -I$(EXSNAPADV) -I$(EXGLIB) -I$(EXSNAPEXP) $(LDFLAGS) $(LIBS)
 	cp $(MAIN) ../Release
+
+$(EXSNAP)/libsnap.a: 
+	make -C $(EXSNAP)
 
 $(EXSNAP)/Snap.o: 
 	make -C $(EXSNAP)
