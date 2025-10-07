@@ -1,4 +1,10 @@
+#ifndef glib_xml_h
+#define glib_xml_h 1
+
 #include "bd.h"
+#include "ds.h"
+#include "bits.h"
+#include "unicodestring.h"
 
 /////////////////////////////////////////////////
 // Xml-Object-Serialization
@@ -421,3 +427,5 @@ public:
   static void GetPlainStrFromXmlStr(const TChA& XmlStr, TChA& PlainChA);
   friend class TPt<TXmlParser>;
 };
+
+#endif // glib_xml_h 1

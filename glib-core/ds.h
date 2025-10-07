@@ -1,3 +1,11 @@
+#ifndef glib_ds_h
+#define glib_ds_h 1
+
+#include "bd.h"
+#include "dt.h"
+#include "fl.h"
+#include "ut.h"
+
 /////////////////////////////////////////////////
 // Address-Pointer
 template <class TRec>
@@ -2820,3 +2828,5 @@ public:
     Fail; return false;}
   TFuncPt operator()() const {return FuncPt;}
 };
+
+#endif // glib_ds_h 1

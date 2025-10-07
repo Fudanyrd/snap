@@ -1,5 +1,13 @@
+#ifndef glib_shash_h
+#define glib_shash_h 1
+
 #ifndef shash_h
 #define shash_h
+
+#include "ds.h"
+#include "fl.h"
+#include "tm.h"
+#include "xmlser.h"
 
 /////////////////////////////////////////////////
 // Hash-List-File
@@ -1478,3 +1486,5 @@ void TPackVec<TVal>::Save(TSOut& SOut) const {
 }
 
 #endif
+
+#endif // glib_shash_h 1

@@ -1,4 +1,9 @@
+#ifndef glib_dt_h
+#define glib_dt_h 1
+
 #include "bd.h"
+#include "fl.h"
+#include "glib-config.h"
 
 /////////////////////////////////////////////////
 // Forward
@@ -1618,3 +1623,5 @@ public:
   TStr GetStr() const;
 };
 
+
+#endif // glib_dt_h 1

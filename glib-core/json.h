@@ -1,4 +1,9 @@
+#ifndef glib_json_h
+#define glib_json_h 1
+
 #include "bd.h"
+#include "bits.h"
+#include "hash.h"
 
 /////////////////////////////////////////////////
 // Json-Value
@@ -116,3 +121,5 @@ public:
   static void GetChAFromVal(const PJsonVal& Val, TChA& ChA);
   static TStr GetStrFromVal(const PJsonVal& Val);
 };
+
+#endif // glib_json_h 1

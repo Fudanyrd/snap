@@ -1,3 +1,8 @@
+#ifndef glib_unicodestring_h
+#define glib_unicodestring_h 1
+
+#include "unicode.h"
+
 /////////////////////////////////////////////////
 // Unicode-Definition
 class TUnicodeDef{
@@ -89,3 +94,5 @@ public:
   // converstions to/from UTF8
   static TStr EncodeUtf8(const int& UniCh);
 };
+
+#endif // glib_unicodestring_h 1

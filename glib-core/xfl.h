@@ -1,4 +1,9 @@
+#ifndef glib_xfl_h
+#define glib_xfl_h 1
+
 #include "bd.h"
+#include "tm.h"
+#include "xmlser.h"
 
 /////////////////////////////////////////////////
 // Find-File-Descriptor
@@ -100,3 +105,5 @@ public:
 
 	void OnStatus(const TStr& MsgStr);
 };
+
+#endif // glib_xfl_h 1

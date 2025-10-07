@@ -1,5 +1,10 @@
+#ifndef glib_xmlser_h
+#define glib_xmlser_h 1
+
 #ifndef _xmlser_h
 #define _xmlser_h
+
+#include "xml.h"
 
 // !bn: pobrisan 'explicit' - je pa se v bd.h - a je prov tko?
 template <class TRec>
@@ -134,3 +139,5 @@ void THash< TKey, TDat, THashFunc>::SaveXml(TSOut& SOut, const TStr& Nm){
   Defrag(); XSaveHd(Nm); XSave(KeyDatV); XSave(AutoSizeP);}
 
 #endif
+
+#endif // glib_xmlser_h 1

@@ -1,4 +1,8 @@
+#ifndef glib_hash_h
+#define glib_hash_h 1
+
 #include "bd.h"
+#include "ds.h"
 #include <stdio.h>
 
 /////////////////////////////////////////////////
@@ -1283,3 +1287,5 @@ public:
     return abs(HashCd);
   }
 };
+
+#endif // glib_hash_h 1

@@ -1,3 +1,6 @@
+#ifndef glib_thread_h
+#define glib_thread_h 1
+
 #ifndef _THREAD_H
 #define _THREAD_H
 
@@ -152,3 +155,5 @@ extern Task taskBuf[TPOOL_TASKS];
 extern ThreadPool tpool;
 
 #endif // _THREAD_H
+
+#endif // glib_thread_h 1

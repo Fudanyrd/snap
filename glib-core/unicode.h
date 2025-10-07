@@ -1,4 +1,8 @@
+#ifndef glib_unicode_h
+#define glib_unicode_h 1
+
 #include "bd.h"
+#include "hash.h"
 
 //#ifndef unicode_h
 //#define unicode_h
@@ -3321,3 +3325,5 @@ ToDos:
 
 //#endif
 
+
+#endif // glib_unicode_h 1

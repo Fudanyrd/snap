@@ -1,3 +1,8 @@
+#ifndef glib_wch_h
+#define glib_wch_h 1
+
+#include "bits.h"
+
 /////////////////////////////////////////////////
 // Wide-Char
 class TWCh{
@@ -115,3 +120,5 @@ public:
 };
 
 
+
+#endif // glib_wch_h 1

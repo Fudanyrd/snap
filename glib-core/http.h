@@ -1,4 +1,8 @@
+#ifndef glib_http_h
+#define glib_http_h 1
+
 #include "bd.h"
+#include "url.h"
 
 /////////////////////////////////////////////////
 // Http-General
@@ -210,3 +214,5 @@ public:
   PSIn GetSIn() const;
 };
 
+
+#endif // glib_http_h 1

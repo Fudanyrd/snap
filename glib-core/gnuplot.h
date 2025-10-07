@@ -1,3 +1,6 @@
+#ifndef glib_gnuplot_h
+#define glib_gnuplot_h 1
+
 #ifndef gnuplot_h
 #define gnuplot_h
 
@@ -664,3 +667,5 @@ void TGnuPlot::PlotCntOverTm(const THash<TSecTm, TVal2>& CntH, const TStr& OutFN
 
 #endif
 
+
+#endif // glib_gnuplot_h 1

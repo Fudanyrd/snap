@@ -1,4 +1,8 @@
+#ifndef glib_tm_h
+#define glib_tm_h 1
+
 #include "bd.h"
+#include "hash.h"
 
 /////////////////////////////////////////////////
 // Forward
@@ -444,3 +448,5 @@ public:
     // returns true if the time has ran out
     bool IsTimeUp() const { return (StopWatch.GetMSecInt() > MxMSecs); }
 };
+
+#endif // glib_tm_h 1

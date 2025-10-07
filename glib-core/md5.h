@@ -1,4 +1,8 @@
+#ifndef glib_md5_h
+#define glib_md5_h 1
+
 #include "bd.h"
+#include "bits.h"
 
 /////////////////////////////////////////////////
 // MD5
@@ -114,3 +118,5 @@ public:
 };
 typedef TVec<TMd5Sig> TMd5SigV;
 
+
+#endif // glib_md5_h 1

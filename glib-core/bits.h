@@ -1,4 +1,9 @@
+#ifndef glib_bits_h
+#define glib_bits_h 1
+
 #include "bd.h"
+#include "fl.h"
+#include "ds.h"
 
 /////////////////////////////////////////////////
 // One byte
@@ -398,3 +403,5 @@ public:
   friend TBSet operator^(const TBSet& LBSet, const int& BitN){
     return TBSet(LBSet)^=BitN;}
 };
+
+#endif // glib_bits_h 1

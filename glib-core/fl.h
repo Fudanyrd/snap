@@ -1,3 +1,6 @@
+#ifndef glib_fl_h
+#define glib_fl_h 1
+
 #include "bd.h"
 
 /////////////////////////////////////////////////
@@ -658,3 +661,5 @@ public:
   static uint64 GetLastWriteTm(const TStr& FNm);
 };
 
+
+#endif // glib_fl_h 1

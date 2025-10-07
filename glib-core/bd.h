@@ -1,5 +1,14 @@
+#ifndef glib_bd_h
+#define glib_bd_h 1
+
 #ifndef bd_h
 #define bd_h
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "glib-config.h"
 
 /////////////////////////////////////////////////
 // Basic-Macro-Definitions
@@ -603,3 +612,5 @@ public:
 
 
 #endif
+
+#endif // glib_bd_h 1

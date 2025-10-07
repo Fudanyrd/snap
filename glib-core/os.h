@@ -1,4 +1,8 @@
+#ifndef glib_os_h
+#define glib_os_h 1
+
 #include "bd.h"
+#include "shash.h"
 
 #ifdef GLib_WIN
 /////////////////////////////////////////////////
@@ -262,3 +266,5 @@ public:
 };
 
 #endif
+
+#endif // glib_os_h 1

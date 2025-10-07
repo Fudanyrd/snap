@@ -1,3 +1,8 @@
+#ifndef glib_env_h
+#define glib_env_h 1
+
+#include "os.h"
+
 /////////////////////////////////////////////////
 // Environment
 class TEnv{
@@ -72,3 +77,5 @@ public:
 
 extern TEnv Env;
 
+
+#endif // glib_env_h 1

@@ -1,4 +1,8 @@
+#ifndef glib_ssmp_h
+#define glib_ssmp_h 1
+
 #include "bd.h"
+#include "ss.h"
 
 //#//////////////////////////////////////////////
 /// TSsParser for Parallel Load. ##TSsParserMP
@@ -95,3 +99,5 @@ public:
 
   const char* DumpStr() const;
 };
+
+#endif // glib_ssmp_h 1

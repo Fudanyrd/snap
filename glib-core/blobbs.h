@@ -1,4 +1,8 @@
+#ifndef glib_blobbs_h
+#define glib_blobbs_h 1
+
 #include "bd.h"
+#include "shash.h"
 
 /////////////////////////////////////////////////
 // Blob-Pointer
@@ -221,3 +225,5 @@ public:
   static bool Exists(const TStr& BlobBsFNm);
 };
 
+
+#endif // glib_blobbs_h 1

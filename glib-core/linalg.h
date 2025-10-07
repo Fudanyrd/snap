@@ -1,3 +1,8 @@
+#ifndef glib_linalg_h
+#define glib_linalg_h 1
+
+#include "bits.h"
+
 ///////////////////////////////////////////////////////////////////////
 // forward declarations
 class TLinAlg;
@@ -566,3 +571,5 @@ public:
 };
 
 typedef TSparseOps<TInt, TFlt> TSparseOpsIntFlt;
+
+#endif // glib_linalg_h 1

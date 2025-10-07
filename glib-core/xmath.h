@@ -1,4 +1,8 @@
+#ifndef glib_xmath_h
+#define glib_xmath_h 1
+
 #include "bd.h"
+#include "hash.h"
 
 /////////////////////////////////////////////////
 // Mathematics-Utilities
@@ -480,3 +484,5 @@ public:
     void SaveTxt(const TStr& ValNm, const TStr& FNm) const {
         TFOut FOut(FNm); SaveStat(ValNm, FOut); }
 };
+
+#endif // glib_xmath_h 1

@@ -1,4 +1,10 @@
+#ifndef glib_lx_h
+#define glib_lx_h 1
+
 #include "bd.h"
+#include "bits.h"
+#include "hash.h"
+#include "tm.h"
 
 /////////////////////////////////////////////////
 // Lexical-Char-Definition
@@ -390,3 +396,5 @@ public:
 
 </SubstList>
 */
+
+#endif // glib_lx_h 1

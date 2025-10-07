@@ -1,4 +1,10 @@
+#ifndef glib_html_h
+#define glib_html_h 1
+
 #include "bd.h"
+#include "http.h"
+#include "lx.h"
+#include "url.h"
 
 /////////////////////////////////////////////////
 // Forward
@@ -381,3 +387,5 @@ public:
 
   bool IsTxt() const;
 };
+
+#endif // glib_html_h 1

@@ -1,4 +1,8 @@
+#ifndef glib_url_h
+#define glib_url_h 1
+
 #include "bd.h"
+#include "hash.h"
 
 /////////////////////////////////////////////////
 // Url
@@ -170,3 +174,5 @@ public:
   static PUrlEnv MkClone(const PUrlEnv& UrlEnv);
 };
 
+
+#endif // glib_url_h 1

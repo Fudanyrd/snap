@@ -1,4 +1,8 @@
+#ifndef glib_ss_h
+#define glib_ss_h 1
+
 #include "bd.h"
+#include "bits.h"
 
 //#//////////////////////////////////////////////
 /// Spread-Sheet Separator Format.
@@ -138,3 +142,5 @@ public:
   const char* DumpStr() const;
 };
 
+
+#endif // glib_ss_h 1

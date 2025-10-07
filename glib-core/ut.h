@@ -1,4 +1,8 @@
+#ifndef glib_ut_h
+#define glib_ut_h 1
+
 #include "bd.h"
+#include "dt.h"
 
 /////////////////////////////////////////////////
 // Type-Name
@@ -204,3 +208,5 @@ public:
 #define Catch } catch (PExcept Except){ErrNotify(Except->GetMsgStr());}
 #define CatchFull } catch (PExcept Except){ErrNotify(Except->GetStr());}
 #define CatchAll } catch (...){}
+
+#endif // glib_ut_h 1

@@ -1,5 +1,13 @@
+#ifndef glib_zipfl_h
+#define glib_zipfl_h 1
+
 #ifndef zipfl_h
 #define zipfl_h
+
+#include "bits.h"
+#include "ds.h"
+#include "fl.h"
+#include "hash.h"
 
 //#//////////////////////////////////////////////
 /// Compressed File Input Stream. The class reads from a compressed file without explicitly uncompressing it.
@@ -109,3 +117,5 @@ public:
 };
 
 #endif
+
+#endif // glib_zipfl_h 1

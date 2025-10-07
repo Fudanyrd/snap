@@ -1,3 +1,8 @@
+#ifndef glib_priorityqueue_h
+#define glib_priorityqueue_h 1
+
+#include "hash.h"
+
 //
 //  priorityqueue.h
 //  glib-core
@@ -127,3 +132,5 @@ private:
  TVal PopMax();
  bool IsEmpty();
 */
+
+#endif // glib_priorityqueue_h 1

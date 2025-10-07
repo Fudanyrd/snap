@@ -1,9 +1,13 @@
+#ifndef glib_hashmp_h
+#define glib_hashmp_h 1
+
 #ifndef hashmp_h
 #define hashmp_h
 
 #ifdef GCC_ATOMIC
 
 #include "bd.h"
+#include "hash.h"
 
 /////////////////////////////////////////////////
 // PHash-Table-Key-Data
@@ -569,3 +573,5 @@ int THashMP<TKey, TDat, THashFunc>::GetRndKeyId(TRnd& Rnd, const double& EmptyFr
 #endif // GCC_ATOMIC
 
 #endif // hashmp_h
+
+#endif // glib_hashmp_h 1
