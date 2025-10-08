@@ -1,0 +1,22 @@
+# Working Dirctory Snap-6.0/examples/agmfit
+# Command: sudo perf record ./agmfitmain
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 731K of event 'cycles'
+# Event count (approx.): 294142444240
+#
+# Overhead  Command     Shared Object         Symbol                                                                                                                
+# ........  ..........  ....................  ......................................................................................................................
+#
+    15.14%  agmfitmain  agmfitmain            [.] TAGMFit::LikelihoodWorker
+     3.77%  agmfitmain  libc.so.6             [.] pthread_mutex_lock
+     3.20%  agmfitmain  libm.so.6             [.] exp
+     3.07%  agmfitmain  agmfitmain            [.] TAGMFit::GradLogLWorker
+     2.68%  agmfitmain  [kernel.kallsyms]     [k] psi_group_change
+     2.67%  agmfitmain  libc.so.6             [.] pthread_mutex_unlock
+     2.63%  agmfitmain  [kernel.kallsyms]     [k] clear_bhb_loop
+     2.62%  agmfitmain  libc.so.6             [.] pthread_cond_signal
+     1.86%  agmfitmain  libc.so.6             [.] pthread_cond_wait

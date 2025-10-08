@@ -1,3 +1,5 @@
+# Working Dirctory snap-slow/examples/agmfit
+# Command: sudo perf record ./agmfitmain
 # To display the perf.data header info, please use --header/--header-only options.
 #
 #
