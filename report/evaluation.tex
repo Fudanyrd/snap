@@ -8,10 +8,13 @@ We build the \textbf{SNAP} project in debug mode
 \footnote{This means that assertions and debug outputs in the code are enabled.}
 and with highest possible compiler optimization  level(\texttt{-O3}), and 
 enabled link-time optimization(\texttt{-flto}).
-For parallel executions, we use $6$ worker threads when creating the thread
+For our parallel executions, we use $6$ worker threads when creating the thread
 pool
 \footnote{Along with the main(coordinator) thread, a total of 7 threads 
-are used.}.
+are used.}. For all of our experiments, we ensure that there is a gap of at
+least 10 minutes between each execution to mimic the effect of rebooting
+\footnote{Ideally, we should reboot before each execution. Since we use a
+physical server, this posits much manual efforts.}.
 
 \paragraph{Evaluation Metrics}. We expect our implementation to achieve 
 performance gains via parallelized execution. Therefore, we compare the 
@@ -27,6 +30,29 @@ parallel algorithms, because of the limitation of computation capabilities of
 \par Community-Affiliation Graph Model\citep{yang2012structure,yang2012community} 
 is a conceptual model of community network, capturing the overlapping nature of 
 network communities.
+
+\paragraph{Performance on Complete Graph} We measured the execution time of 
+both original version of the \texttt{agmfitmain} program
+\footnote{A frontend of AGM algorithm. }
+ and our optimized version. For its input data, we constructed an undirected,
+complete graph with $200$ vertices and $19900$ edges. This medium-size graph 
+is large enough  for performance-benchmarking purposes.
+% to demonstrate the difference between two implementations.
+We ran each compiled program $8$ times.
+The result is shown in Figure~\ref{fig:agmcomplete}.
+
+\begin{figure*}[ht]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{images/agmcomplete.pdf}
+        \caption{Execution Time Comparison of \texttt{agmfitmain}. }
+        \label{fig:agmcomplete}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{images/agmcomplete.pdf}
+        \caption{FIXME:  Add the correct image and its caption.}
+    \end{subfigure}
+\end{figure*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

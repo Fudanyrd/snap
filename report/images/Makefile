@@ -7,6 +7,7 @@ agmfit-opt.tex: agmfit.opt.txt util.py tablegen.py
 	@python tablegen.py  agmfit.opt.txt agmfit-opt.tex
 
 FIGURES = ompdemo.pdf
+FIGURES += agmcomplete.pdf
 TABLES = agmfit-base.tex agmfit-opt.tex
 
 all: $(FIGURES) $(TABLES)

@@ -22,9 +22,9 @@ if __name__ == "__main__":
     ours = np.array(exectimes['ours'])
     
     plt.boxplot(np.stack([baseline, ours]).T,
-                tick_labels=['baseline', 'ours'])
+                tick_labels=['Baseline', 'Ours'])
     
-    plt.title('Boxplot of Exec Time')
+    plt.title('Boxplot of Program Execution Time')
     plt.ylabel("Exec Time(s)")
     plt.grid()
     plt.savefig('agmcomplete.pdf')
