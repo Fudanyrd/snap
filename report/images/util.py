@@ -73,6 +73,49 @@ def lst_to_table(data: list, caption: str | None = None,
     # ret += "\\end{table}\n"
     return ret
 
+def dict_to_table(data: dict, id_attr: str = 'setup', 
+                 label: str | None = None) -> str:
+    assert len(data), "Empty input list!"
+    setups: list = []
+    for setup in data.keys():
+        assert isinstance(data[setup], dict), "List element is not dict!"
+        setups.append(setup)
+
+    ret: str = "" # "\\begin{table}\n" 
+
+    attrs: list = []
+    for k in data.keys():
+        for attr in data[k].keys():
+            attrs.append(attr)
+        break
+    
+    ret += "\t\\begin{tabular}"
+    ret += "{|" + ("l|" * (len(attrs) + 1)) + "} \\hline \n"
+
+    ret += '\t\t'
+    ret += id_attr
+    for i in range(len(attrs)):
+        attr = attrs[i]
+        ret +=  " & "
+        ret += attr
+    ret += "\\\\ \\hline\n"
+
+    for row in data:
+        ret += '\t\t'
+        ret += row
+        record = data[row]
+        for i in range(0, len(attrs)):
+            attr = attrs[i]
+            ret += " & "
+            item = record[attr]
+            ret += _display(item)
+
+        ret += "\\\\ \\hline\n"
+
+    ret += "\t\\end{tabular}\n"
+    # ret += "\\end{table}\n"
+    return ret
+
 def perf_data(infile: str) -> list:
     records = []
     counts: int = 0
@@ -113,4 +156,19 @@ if __name__ == "__main__":
         }
     ]
 
+    dct = {
+        "1": {
+            "foo": 1,
+            "bar": 2,
+            "baz": {"data": 3, "color": "FF0000"},
+        },
+        "2": {
+            "foo": {"data": 3, "bold": True},
+            "bar": 2,
+            "baz": 1,
+        }
+    }
+
     print(lst_to_table(lst))
+    print(dict_to_table(dct, 'ID'))
+
