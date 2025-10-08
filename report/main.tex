@@ -57,9 +57,35 @@
 
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{listings}
 \usepackage{natbib}
 \usepackage{setspace}
+\usepackage{subcaption}
 \usepackage{url}
+
+%% package listings
+\lstset{
+  language=C,
+  basicstyle=\footnotesize\ttfamily,
+  captionpos=b,
+  breaklines=false,
+  escapeinside={(*}{*)},
+  keywordstyle=\color{blue},
+  tabsize=2,
+  showspaces=false,
+  breakatwhitespace=true,
+  showstringspaces=false,
+  columns=fullflexible,
+  numbers=left,
+  numbersep=3pt,
+  showtabs=false,
+  % numberstyle=\scriptsize\ttfamily\color{mygray},
+  morekeywords={string,foreach,var,async,await,lock,out,asm,volatile,class}
+}
+\newcommand{\id}[1]{\texttt{#1}}
+\newcommand{\namedplaceholder}[1]{\colorbox{blue}{\textcolor{white}{\id{~#1~}}}}
+\newcommand{\placeholder}[1]{\colorbox{yellow}{\textcolor{black}{\id{#1}}}}
 
 %%
 %% end of the preamble, start of the body of the document source.
@@ -112,7 +138,7 @@
 
 \received{09 January 2026}
 \received[revised]{09 January 2026}
-\received[accepted]{12 March 2009}
+\received[accepted]{12 March 2027}
 
 % Code Repository
 
@@ -123,6 +149,7 @@
 \par Our code is publicly available at \url{https://github.com/Fudanyrd/snap}.
 
 \input{related-work}
+\input{method}
 \input{evaluation}
 
 \bibliographystyle{ACM-Reference-Format}

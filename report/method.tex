@@ -1,0 +1,110 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Implementation} \label{sec:impl}
+
+\par We present our methodology of discovering the bottle-necks of 
+\texttt{Snap v6.0} implementation, and our approach to alleviate the performance
+impact via parallelism. Furthermore, to avoid having to constantly spawn and
+destroy threads, we designed a generic thread pool to coordinate and 
+synchronize these threads to avoid the overhead introduced by thread creation
+and deallocation.
+
+
+\subsection{Performance Analysis of \textbf{SNAP}}
+
+% Snap (version 6.0) is a large code base with about \texttt{111k} 
+% lines of \texttt{C++} code.
+
+\par We use \texttt{perf}\citep{linux-perf}, a performance analysis tools to 
+guide our rewrite process. It utilize \textbf{performance counters} for Linux,
+which are a kernel-based subsystem that provide a framework for all things 
+performance analysis. This subsystem sends regular timer interrupts to the
+running process, and backtrace of the process's call-stack for the instruction
+being executed in its interrupt handler. Such profiling trace provides us with 
+runtime statistics of which instructions and functions consume more processor 
+time, and ultimately insights
+into which part of code to optimize for highest performance improvement.
+
+\paragraph{An overview of snap runtime statistics}. 
+
+\subsection{Thread Pool Implementation}
+
+\par Indeed, the \textbf{SNAP} library has some parallelized code, mainly 
+with the \texttt{openmp} framework\citep{openmp,embedded-hps}. An example
+of such optimization is shown in Figure~\ref{code:openmp}. As part of the page-rank
+implementation, this snippet copies results from \texttt{PRankV} to \texttt{PRankH}.
+Instead of using one core to move the data, it uses \texttt{openmp} parallelism; 
+each  thread copies a disjoint part of data
+\footnote{Permalink 
+\url{https://github.com/Fudanyrd/snap/blob/b62ece5fe169686a81dbc1a58669722d81114b33/snap-core/centr.cpp\#L518}}.
+
+\begin{figure}[ht]
+    \centering
+\begin{lstlisting}[frame=tlbr]
+    /* Code snippet, line 515, snap-core/centr.cpp */
+    #pragma (*\namedplaceholder{omp parallel}*) for schedule(dynamic,100000)
+    for (int i = 0; i < NNodes; i++) {
+        TNEANet::TNodeI NI = NV[i];
+        PRankH[i] = PRankV[NI.GetId()];
+    }
+
+    return 0;
+\end{lstlisting}
+    \caption{An example of \texttt{openmp}-introduced parallelism.}
+    \label{code:openmp}
+\end{figure}
+
+\par Unfortunately, if the above code snippet is executed intensely, the 
+performance improvements introduced by \texttt{openmp} will diminish. Since 
+the profiler cannot provide us with the reason for this phenomenon, we can
+only assume from empirical evidence that it is because of the thread creation 
+and deallocation overhead. An illustrative code snippet and its runtime
+statistics is shown in Figure~\ref{code:ompdemo} and Figure~\ref{fig:ompdemo} respectively,
+to support this claim\footnote{Compiled and linked with \texttt{-O1 -fopenmp -lrt}}.
+Therefore, we feel that keeping all these thread in a global pool is necessary;
+it avoids such runtime overhead by creating threads at program initialization,
+and destroys them before exiting.
+
+\begin{figure}[ht]
+    \centering
+\begin{lstlisting}[frame=tlbr]
+#include <omp.h>
+
+int main(int argc, char **argv) {
+  int fd = open("/dev/null", O_WRONLY);
+  /* Here N is provided by command-line arguments. 
+   * It controls how many times the sum operation
+   * are executed.
+   */
+  for (int run = 0; run < (*\namedplaceholder{N}*) ; run++) {
+    int total = 0;
+    #pragma (*\namedplaceholder{omp parallel}*) for
+    for (int i = 0; i < 1024; i++) {
+      total += rand();
+    }
+    /* Avoid compiler optimizing out the total,
+     * and introduce lower overhead.
+     */
+    (void) write(fd, &total, sizeof(total));
+  }
+
+  close(fd);
+  return 0;
+}
+\end{lstlisting}
+    \caption{Demo program to illustrate overhead of threading.}
+    \label{code:ompdemo}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/ompdemo.pdf}
+    \caption{The Execution Time of Program~\ref{code:ompdemo}. \\
+        The \texttt{Ideal} line illustrates the execution time when the threading
+        approach has no overhead. \\
+        We conclude that the overhead of threading increases with scaling of $N$.
+        When $N = 10^5$, the overhead reaches \textbf{58.2\%}. }
+    \label{fig:ompdemo}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
