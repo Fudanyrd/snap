@@ -937,7 +937,12 @@ void TAGMFit::GradLogLWorker(void **args) {
 void TAGMFit::GradLogLForLambda(TFltV& GradV) const {
   const int LambdaVLen = this->LambdaV.Len() /* = 23 */;
   GradV.Gen(LambdaVLen);
-  TFltV SumEdgeProbsV(LambdaVLen);
+  
+  /* Avoid allocating a double array of `LambdaVLen` */
+  /* TFltV SumEdgeProbsV(LambdaVLen); */
+  for (int i = 0; i < LambdaVLen; i++) {
+    GradV[i] = 0.0;
+  }
   const int EdgeComVHLen = this->EdgeComVH.Len() /* = 613 */;
   // for (int e = 0; e < EdgeComVHLen; e++) {
   //   const TIntSet& JointCom = EdgeComVH[e];
@@ -982,7 +987,7 @@ void TAGMFit::GradLogLForLambda(TFltV& GradV) const {
     while ((fini = tpool.waitFor()) != (Task *)0) {
       const double *Sum = (const double *) fini->args[1];
       for (int k = 0; k < LambdaVLen; k++) {
-        SumEdgeProbsV[k] += Sum[k];
+        GradV[k] += Sum[k];
       }
       delete[] Sum;
     }
@@ -992,7 +997,7 @@ void TAGMFit::GradLogLForLambda(TFltV& GradV) const {
     const int ComSize = CIDNSetV[k].Len();
     int MaxEk = ComSize * (ComSize - 1) / 2;
     int NotEdgesInCom = MaxEk - ComEdgesV[k];
-    GradV[k] = SumEdgeProbsV[k] - (double) NotEdgesInCom;
+    GradV[k] -= (double) NotEdgesInCom;
     if (LambdaV[k] > 0.0 && RegCoef > 0.0) { //if regularization exists
       GradV[k] -= RegCoef;
     }
