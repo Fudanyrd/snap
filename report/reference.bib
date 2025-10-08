@@ -33,3 +33,57 @@ keywords = {compilation, dependence analysis, locality, multiprocessors, optimiz
   url={https://ieeexplore.ieee.org/abstract/document/6413734/},
   organization={IEEE}
 }
+@software{linux-perf,
+    title={Perf: Performance Analysis Tools for Linux},
+    url={https://manpages.debian.org/trixie/linux-perf/perf.1.en.html},
+}
+@inproceedings{p2go,
+author = {Wintermeyer, Patrick and Apostolaki, Maria and Dietm\"{u}ller, Alexander and Vanbever, Laurent},
+title = {P2GO: P4 Profile-Guided Optimizations},
+year = {2020},
+isbn = {9781450381451},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3422604.3425941},
+doi = {10.1145/3422604.3425941},
+abstract = {Programmable devices allow the operator to specify the data-plane behavior of a network device in a high-level language such as P4. The compiler then maps the P4 program to the hardware after applying a set of optimizations to minimize resource utilization. Yet, the lack of context restricts the compiler to conservatively account for all possible inputs -- including unrealistic or infrequent ones -- leading to sub-optimal use of the resources or even compilation failures. To address this inefficiency, we propose that the compiler leverages insights from actual traffic traces, effectively unlocking a broader spectrum of possible optimizations. We present a system working alongside the compiler that uses traffic-awareness to reduce the allocated resources of a P4 program by: (i) removing dependencies that do not manifest; (ii) adjusting table and register sizes to reduce the pipeline length; and (iii) offloading parts of the program that are rarely used to the controller. Our prototype implementation on the Tofino switch automatically profiles the P4 program, detects opportunities and performs optimizations to improve the pipeline efficiency. Our work showcases the potential benefit of applying profiling techniques used to compile general-purpose languages to compiling P4 programs.},
+booktitle = {Proceedings of the 19th ACM Workshop on Hot Topics in Networks},
+pages = {146–152},
+numpages = {7},
+keywords = {resource allocation, programmable networks, programmable data plane, profile-guided, p4, optimization, compilation},
+location = {Virtual Event, USA},
+series = {HotNets '20}
+}
+@book{embedded-hps,
+title = {Embedded Systems: in High Performance Systems, Applications and Projectsin High Performance Systems, Applications and Projects},
+ISBN = {978-953-51-0350-9},
+url = {https://doi.org/10.5772/2684},
+DOI = {10.5772/2684},
+publisher = {IntechOpen},
+year = {2012},
+month = {Mar},
+address = {London},
+author = {Kiyofumi Tanaka},
+}
+@article{openmp,
+title = {Running OpenMP applications efficiently on an everything-shared SDSM},
+journal = {Journal of Parallel and Distributed Computing},
+volume = {66},
+number = {5},
+pages = {647-658},
+year = {2006},
+note = {IPDPS '04 Special Issue},
+issn = {0743-7315},
+doi = {https://doi.org/10.1016/j.jpdc.2005.06.018},
+url = {https://www.sciencedirect.com/science/article/pii/S0743731505001668},
+author = {J.J. Costa and T. Cortes and X. Martorell and E. Ayguade and J. Labarta},
+keywords = {OpenMP, Software distributed shared memory, Scalability, Adaptability, Cooperation},
+abstract = {Traditional software distributed shared memory (SDSM) systems modify the semantics of a real hardware shared memory system by relaxing the coherence semantic and by limiting the memory regions that are actually shared. These semantic modifications are done to improve performance of the applications using it. In this paper, we will show that a SDSM system that behaves like a real shared memory system (without the afore-mentioned relaxations) can also be used to execute OpenMP applications and achieve similar speedups as the ones obtained by traditional SDSM systems. This performance can be achieved by encouraging the cooperation between the SDSM and the OpenMP runtime instead of relaxing the semantics of the shared memory. In addition, techniques like boundaries alignment and page presend are demonstrated as very useful to overcome the limitations of the current SDSM systems.}
+}
+@software{snap,
+    title = {SNAP: Stanford Network Analysis Platform},
+    author={Jure Leskovec},
+    year = {2009},
+    url={http://snap.stanford.edu/snap/download.html},
+}
+

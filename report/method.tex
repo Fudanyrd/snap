@@ -28,7 +28,7 @@ into which part of code to optimize for highest performance improvement.
 
 \subsection{Thread Pool Implementation}
 
-\par Indeed, the \textbf{SNAP} library has some parallelized code, mainly 
+\par Indeed, the \snap library has some parallelized code, mainly 
 with the \texttt{openmp} framework\citep{openmp,embedded-hps}. An example
 of such optimization is shown in Figure~\ref{code:openmp}. As part of the page-rank
 implementation, this snippet copies results from \texttt{PRankV} to \texttt{PRankH}.
@@ -104,6 +104,44 @@ int main(int argc, char **argv) {
         We conclude that the overhead of threading increases with scaling of $N$.
         When $N = 10^5$, the overhead reaches \textbf{58.2\%}. }
     \label{fig:ompdemo}
+\end{figure}
+
+\par The idea of the thread pool is to reserve several worker threads; when the
+main thread needs to perform some intense computations, the pool will wake up
+these workers to perform their assigned tasks separately. The pseudo code of how
+we want to parallelize the snippet~\ref{code:ompdemo} with a thread pool
+is shown in Figure~\ref{code:tpdemo}. Task assignment is done by the \texttt{addTask}
+method; retrieving result is achieved by \texttt{waitFor}.
+
+\begin{figure}[ht]
+    \centering
+\begin{lstlisting}[frame=tlbr]
+/* Global thread pool. */
+extern (*\namedplaceholder{ThreadPool}*) tpool;
+
+/* Returns sum of `n` random numbers. */
+static int worker(int n) {
+    int ret = 0;
+    for (int i = 0; i < n; i++) ret += rand();
+    return ret;
+}
+
+int main() {
+    /* Divide the task evenly into K parts; 
+     * add tasks the pool for worker thread to perform. 
+     */
+    for (int t = 0; t < K; t++) (*\namedplaceholder{tpool.addTask}*)(worker, N / K);
+
+    int total = 0, claimed = 0;
+    task_t *finished;
+    /* Aggregate the result of each task. */
+    while (finished = (*\namedplaceholder{tpool.waitFor}*)()) 
+        (total += TASK_RESULT(finished), claimed += 1);
+    
+    /* Should claim K results. */
+    assert(claimed == K);
+}
+\end{lstlisting}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
