@@ -1,0 +1,20 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 122K of event 'cycles'
+# Event count (approx.): 121527698243
+#
+# Overhead  Command     Shared Object         Symbol                                                                                                                
+# ........  ..........  ....................  ......................................................................................................................
+#
+    19.60%  agmfitmain  agmfitmain            [.] TAGMFit::SelectLambdaSum
+     6.80%  agmfitmain  agmfitmain            [.] TAGMFit::Likelihood
+     4.86%  agmfitmain  libm.so.6             [.] exp
+     3.36%  agmfitmain  libm.so.6             [.] 0x000000000007670b
+     3.17%  agmfitmain  libm.so.6             [.] 0x0000000000076518
+     2.85%  agmfitmain  agmfitmain            [.] TAGMFit::GradLogLForLambda
+     2.79%  agmfitmain  libm.so.6             [.] 0x0000000000076754
+     2.26%  agmfitmain  libm.so.6             [.] 0x0000000000076759
+     2.25%  agmfitmain  libm.so.6             [.] 0x0000000000076746
