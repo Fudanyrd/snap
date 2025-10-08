@@ -1,4 +1,6 @@
-%.pdf: %.py
+FIGURE_DATA = agmfit.json
+
+%.pdf: %.py $(FIGURE_DATA)
 	@python $<
 
 agmfit-base.tex: agmfit.base.txt util.py tablegen.py
