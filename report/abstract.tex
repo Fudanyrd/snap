@@ -4,11 +4,11 @@
   \textbf{SNAP} is written in \texttt{C++} and it scales to massive graphs with hundreds
   of millions of nodes and billions of edges. However, when applying the \textbf{SNAP}
   framework to real-world datasets, we found that the performance of \textbf{SNAP}
-  is highly constrained by its single-thread execution. To this end, we have made
+  is highly constrained by its single-threaded execution. To this end, we have made
   manual efforts to optimize its scalability and ultimately, its runtime overhead 
-  on various social-network mining tasks. Our methodology includes crating a high-performance 
+  on various social network mining tasks. Our methodology includes crating a high-performance 
   thread pool and utilize it to parallelize computation-intense code. Experimental 
-  results showed that our implementation is \texttt{0.87x} faster on community discovery tasks,
+  results showed that our implementation is \texttt{1.87x} faster on community detection tasks,
   and \texttt{FIXME-x} faster for node centrality calculation.
 \end{abstract}
 
