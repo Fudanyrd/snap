@@ -7,7 +7,22 @@
 
 \subsection{Community Detection Algorithms}
 
-\par TODO
+\par We investigate two types of community detection algorithms,
+Community Structure\citep{girvan2002community}  and AGM\citep{yang2012structure}.
+
+\paragraph{Community Structured Based Method} A conspicuous property of 
+community structure is that network nodes are tightly joined, and that
+there are only loose connections between communities. Based on this,
+Girvan et al. proposed a method to detect such community structure and
+find non-overlapping communities in both social and biological networks
+\citep{girvan2002community}. It iteratively computes the "betweeness"\citep{freeman1977graph}
+of each edge, removes the edge with highest "betweeness", and terminates
+when there is no edges left. This method captures community structure
+with high accuracy and sensitivity. However, betweeness calcluation algorithm's 
+complexity  is $O(|E| |V|)$ for network $G(V,E)$, resulting in an
+entire worst-case time of $O(|E|^2 |V|)$.
+
+% Amdahl's law :)
 
 % What is AGM? How it works? Its Experiement results?
 % This is a convex optimization 😃 :)
@@ -29,7 +44,7 @@ observed edges $G(E)$:
     \text{argmax}_{\{p_c\}} L(\{p_c\}) &= \prod_{(u,v)\in E} p(u,v) 
         \prod_{(u,v)\notin E} (1 - p(u,v))\\
     &\equiv \sum_{(u,v)\in E}\log{(1 - \prod_{k\in C_{uv}} (1-p_k))} + 
-        \sum_{(u,v)\notin E}\log{\prod_{k\in C_{uv}} (1-p_k)}
+        \sum_{(u,v)\notin E}\sum_{k\in C_{uv}} \log{(1-p_k)}
 \end{align}
 Problem~\ref{form:agmopt}\footnote{It can be seen that $\{p_c\}$ is the parameters to fit.}
 can be converted to a convex optimization 
