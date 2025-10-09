@@ -1,4 +1,5 @@
-\section{Related Works}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Related Work}
 
 \subsection{High-Performance Computation}
 
@@ -6,4 +7,36 @@
 
 \subsection{Community Detection Algorithms}
 
+\par TODO
+
+% What is AGM? How it works? Its Experiement results?
+% This is a convex optimization 😃 :)
+\paragraph{AGM} \textit{Community-Affiliation Graph Model}\citep{yang2012structure}
+is a conceptual model of network community structure, which detects 
+\textbf{overlapping} network communities. Given a network graph $G(V,E)$, the
+goal is to create a bipartite affiliation graph $B(V, C, M)$, where
+$u\in V$ is a node(vertex), $c\in C$ is a community, 
+$k\in M$ is an edge $(u,c)$ if $u$ belongs to community $c$. Each
+community $c\in C$ has a probability $p_c\in [0,1]$.
+For each edges $(u,v)\in G(E), u,v \in V$, the likelihood of it is 
+\begin{align}
+    p_(u,v) &= 1- \prod_{k\in C_{uv}}(1-p_k)
+\end{align},
+where $C_{uv}\subset C$ is a set of communities $u,v$ have in common.
+The community detection problem is now to optimize the likelihood of 
+observed edges $G(E)$: 
+\begin{align} \label{form:agmopt}
+    \text{argmax}_{\{p_c\}} L(\{p_c\}) &= \prod_{(u,v)\in E} p(u,v) 
+        \prod_{(u,v)\notin E} (1 - p(u,v))\\
+    &\equiv \sum_{(u,v)\in E}\log{(1 - \prod_{k\in C_{uv}} (1-p_k))} + 
+        \sum_{(u,v)\notin E}\log{\prod_{k\in C_{uv}} (1-p_k)}
+\end{align}
+Problem~\ref{form:agmopt}\footnote{It can be seen that $\{p_c\}$ is the parameters to fit.}
+can be converted to a convex optimization 
+problem and solved efficiently\citep{yang2012structure}. 
+With this model, Yang et al.\citep{yang2012structure} concluded that overlaps of communities are
+usually densely connected, and that ground-truth communities contain
+high-degree hub nodes that reside in community overlaps.
+
+\subsection{Node Centrality Algorithms}
 \par TODO
