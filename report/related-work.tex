@@ -3,7 +3,30 @@
 
 \subsection{High-Performance Computation}
 
-\par TODO\citep{compiler-for-hpc}
+\paragraph{Multi-Processor Programming Frameworks} POSIX-Thread\citep{pthread}
+(or Pthreads) and OpenMP\citep{openmp} are two commonly-used shared-memory 
+multi-processor parallel programming frameworks.  A single process can have 
+several POSIX threads, executing certain parts of the program in 
+parallel. The programmers have to explicitly spawn or destroy POSIX threads.
+OpenMP, on the other hand, implicitly manages threads, therefore
+offering programmers a simple \texttt{\#pragma omp} directive to parallel execution of 
+loops\footnote{An example of this is in Figure~\ref{code:ompdemo}}.
+Our thread pool implementation discussed in Section~\ref{sec:impl:tp}
+is based on POSIX-Thread because it offers explicit way to 
+synchronize the worker and host threads.
+
+\paragraph{Compiler Support for HPC} Compiler optimizations  has become an
+integral part of modern high-performance computer systems. As these 
+optimizations become increasingly effective and versatile, programmers
+can be less concerned about the underlying intricate details of hardware
+architectures. Most optimizations for uni-processors reduce the number of
+instructions executed by the program using program analysis based 
+transformations\citep{compiler-for-hpc}. However, since there exist several
+different parallel computing architectures(vector-CPU, shared-memory
+multi-processor, distributed-memory multi-processor), automatically 
+parallelize code remains highly challenging for compilers.
+
+% "😭 -> 😃" 
 
 \subsection{Community Detection Algorithms}
 
@@ -15,10 +38,10 @@ community structure is that network nodes are tightly joined, and that
 there are only loose connections between communities. Based on this,
 Girvan et al. proposed a method to detect such community structure and
 find non-overlapping communities in both social and biological networks
-\citep{girvan2002community}. It iteratively computes the "betweeness"\citep{freeman1977graph}
-of each edge, removes the edge with highest "betweeness", and terminates
+\citep{girvan2002community}. It iteratively computes the "betweenness"\citep{freeman1977graph}
+of each edge, removes the edge with highest "betweenness", and terminates
 when there is no edges left. This method captures community structure
-with high accuracy and sensitivity. However, betweeness calcluation algorithm's 
+with high accuracy and sensitivity. However, betweenness calculation algorithm's 
 complexity  is $O(|E| |V|)$ for network $G(V,E)$, resulting in an
 entire worst-case time of $O(|E|^2 |V|)$.
 
