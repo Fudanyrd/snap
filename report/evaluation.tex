@@ -39,7 +39,11 @@ complete graph with $200$ vertices and $19900$ edges. This medium-size graph
 is large enough  for performance-benchmarking purposes.
 % to demonstrate the difference between two implementations.
 We ran each compiled program $8$ times.
-The result is shown in Figure~\ref{fig:agmcomplete}.
+The result is shown in Figure~\ref{fig:agmcomplete}. We also measured the CPU utility 
+rate of both our optimized program  against original ones, the result is 
+shown in Figure~\ref{fig:agmcpu}. We observe that our implementation make
+good use of computation resources available, and completes the 
+community detection task faster.
 
 \begin{figure*}[ht]
     \centering
@@ -49,9 +53,49 @@ The result is shown in Figure~\ref{fig:agmcomplete}.
         \label{fig:agmcomplete}
     \end{subfigure}
     \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{images/agmcomplete.pdf}
-        \caption{FIXME:  Add the correct image and its caption.}
+        \includegraphics[width=\textwidth]{images/agmcpu.pdf}
+        \caption{CPU Status of Original and Our Implementation.}
+        \label{fig:agmcpu}
     \end{subfigure}
+\end{figure*}
+
+\paragraph{Visualization Program Output} We selected three datasets:
+the \texttt{NCAA football teams}\footnote{This is the testing dataset 
+for AGM algorithm, see \url{https://github.com/Fudanyrd/snap/blob/master/examples/agmfit/ReadMe.txt}. }, 
+the \texttt{Facebook EGO Network}\citep{egonetwork}, 
+and the \texttt{GEM Facebook page network}\citep{gemsec} as test input
+for our optimized \texttt{agmfitmain} program. We observe that our program
+yields similar\footnote{As stated in the Related Work section, AGM
+is essentially a convex optimization problem, hence there is no guarantee
+that each execution produces identical output. }
+outputs as original program, therefore increasing 
+the confidence that our manual optimizations are valid. 
+We use Gephi\footnote{\url{https://github.com/gephi/gephi.git}} as 
+our visualization tool, and \texttt{Force Atlas} as the layout style. Moreover,
+we modified the graph dump module(\texttt{TAGMUtil}) and assign a color
+to nodes belonging to the same community\footnote{See \texttt{TAGMUtil::DefaultColorTable}
+method}.
+The visualization of the three datasets are shown in Figure~\ref{fig:agmviz}. 
+
+\begin{figure*}[ht]
+    \centering
+    \begin{subfigure}[b]{0.32\textwidth}
+        \includegraphics[width=\textwidth]{viz/football.pdf}
+        % agmfitmain -c:3
+        \caption{NCAA Football Teams}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.32\textwidth}
+        \includegraphics[width=\textwidth]{viz/facebook.pdf}
+        % agmfitmain -l:facebook/0.feat -i:gemsec/0.edges -c:7
+        \caption{Facebook EGO Network}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.32\textwidth}
+        \includegraphics[width=\textwidth]{viz/gem.pdf}
+        % agmfitmain -l:gemsec/tvshow.feat -i:gemsec/tvshow.edges -c:3
+        \caption{GEM Facebook Page Network}
+    \end{subfigure}
+    \caption{Visualization of Community Detection Result.}
+    \label{fig:agmviz}
 \end{figure*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
