@@ -1,4 +1,5 @@
 FIGURE_DATA = agmfit.json
+FIGURE_DATA += agmcpu.json
 
 %.pdf: %.py $(FIGURE_DATA)
 	@python $<
@@ -10,6 +11,7 @@ agmfit-opt.tex: agmfit.opt.txt util.py tablegen.py
 
 FIGURES = ompdemo.pdf
 FIGURES += agmcomplete.pdf
+FIGURES += agmcpu.pdf
 TABLES = agmfit-base.tex agmfit-opt.tex
 
 all: $(FIGURES) $(TABLES)
