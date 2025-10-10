@@ -63,10 +63,10 @@ public:
   }
   
   /**
-   * Generate a default color table for each non-intersect groups 
+   * Generate a default color table for each non-intersect communities 
    * of nodes. 
    * @param G: the graph(with nodes and edges)
-   * @param CmtyVV: list of groups, each group is a list of nodes.
+   * @param CmtyVV: list of communities, each community is a list of nodes.
    * @param NIDNameH: a hash table mapping nid to name.
    * @author Fudanyrd
    */

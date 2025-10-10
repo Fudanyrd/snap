@@ -4,6 +4,7 @@
 #include "agmfit.h"
 
 #include <stdio.h>
+#include <string.h>
 
 /////////////////////////////////////////////////
 // AGM graph generation.
@@ -321,27 +322,95 @@ THash<TInt, TIntTr> TAGMUtil::DefaultColorTable(
 const PUNGraph &G, const TVec<TIntV> &CmtyVV,
 const THash<TInt, TStr>& NIDNameH) {
   static const int colormap[][3] = {
-    {0xff, 0x80, 0x80}, /* #ff8080 */
-    {0x8d, 0xd3, 0x5f}, /* #8dd35f */
-    {0xff, 0xe6, 0x80}, /* #ffe680 */
-    {0x23, 0xa8, 0xf2}, /* #23a8f2 */
-    {0x4b, 0x02, 0x66}, /* #4b0266 */
-    {0xc0, 0xc0, 0xc0}, /* #c0c0c0 */
     {0xff, 0x20, 0x10}, /* #ff2010 */
+    {0x4b, 0x02, 0x66}, /* #4b0266 */
     {0x0d, 0xff, 0x7f}, /* #0dff7f */
+    {0x10, 0x50, 0x80}, /* #105080 */
+    {0xd5, 0xb0, 0x40}, /* #d5b040 */
+    {0xff, 0x80, 0x80}, /* #ff8080 */
+    {0x00, 0x00, 0x00}, /* #000000 */
+    {0x8d, 0xd3, 0x5f}, /* #8dd35f */
+    {0x23, 0xa8, 0xf2}, /* #23a8f2 */
   };
   const int colors = sizeof(colormap) / sizeof(colormap[0]);
+  const int Communities = CmtyVV.Len();
+
+  THash<TInt, TInt> NodeToCommunity;
+  do {
+    THash<TInt, TInt> NodeCmtCount; /* NodeId -> # Communities it belongs to . */
+    for (int c = 0; c < Communities; c++) {
+      const TIntV &Members = CmtyVV[c];
+      const int NMember = CmtyVV[c].Len();
+      for (int u = 0; u < NMember; u++) {
+        const int Member = Members[u];
+        if (!NodeToCommunity.IsKey(Member)) {
+          NodeToCommunity.AddDat(Member, c);
+        }
+        if (NodeCmtCount.IsKey(Member)) {
+          NodeCmtCount.GetDat(Member) += 1;
+        } else {
+          NodeCmtCount.AddDat(Member, 1);
+        }
+      }
+    }
+
+    int *buf = new int[Communities];
+
+    /* Eliminiate ambiguity(i.e. overlapping communities). */
+    THash<TInt, TInt> NodeToNewCmt; /* NodeID -> New Assigned Community. */
+    for (THashKeyDatI<TInt, TInt> Iter = NodeCmtCount.BegI(); 
+         Iter < NodeCmtCount.EndI(); Iter++) {
+      const TInt &NodeId = Iter.GetKey();
+      if (Iter.GetDat() < 2) { continue; }
+      memset(buf, 0, sizeof(int) * Communities);
+
+      /* Find communities of the direct neighbors of this node. */
+      for (TUNGraph::TEdgeI EI = G->BegEI(); EI < G->EndEI(); EI++) {
+        int Src = EI.GetSrcNId();
+        int Dst = EI.GetDstNId();
+        if(NodeId == Src) {
+        } else if (NodeId == Dst) {
+          Dst = Src;
+        } else {
+          continue;
+        }
+        if (NodeToCommunity.IsKey(Dst)) {
+          int DstCmt = NodeToCommunity.GetDat(Dst);
+          buf[DstCmt] += 1;
+        }
+      }
+
+      /* Based on the neighbor's community, determine current 
+         nodes' community. */
+      int ArgMaxC = -1;
+      int MaxC = -1;
+      for (int c = 0; c < Communities; c++) {
+        if (buf[c] > MaxC) {
+          MaxC = buf[c];
+          ArgMaxC = c;
+        }
+      }
+      IAssert(ArgMaxC != -1);
+      if (ArgMaxC != NodeToCommunity.GetDat(NodeId)) {
+        NodeToNewCmt.AddDat(NodeId, ArgMaxC);
+      }
+    }
+
+    for (THashKeyDatI<TInt, TInt> Iter = NodeToNewCmt.BegI(); 
+         Iter < NodeToNewCmt.EndI(); Iter++) {
+      NodeToCommunity.GetDat(Iter.GetKey()) = Iter.GetDat();
+    }
+
+    delete[] buf;
+  } while (0);
 
   THash<TInt, TIntTr> ret;
-  const int groups = CmtyVV.Len();
-  for (int c = 0; c < groups; c++) {
-    const int members = CmtyVV[c].Len();
-    const int color = c % colors;
-    for (int u = 0; u < members; u++) {
-      /* Assign a color to this member. */
-      ret.AddDat(CmtyVV[c][u], TIntTr(colormap[color][0],
-        colormap[color][1], colormap[color][2]));
-    }
+  for (THashKeyDatI<TInt, TInt> Iter = NodeToCommunity.BegI(); 
+       Iter < NodeToCommunity.EndI(); Iter++) {
+    const int NodeId = Iter.GetKey();
+    const int CmtId = Iter.GetDat();
+    const int *col = colormap[CmtId % colors];
+    ret.AddDat(NodeId, TIntTr(col[0], col[1], col[2]));
   }
 
   return ret;
