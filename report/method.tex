@@ -165,5 +165,13 @@ int main() {
     \label{code:tpdemo}
 \end{figure}
 
+\par Our thread pool implementation is based on a concurrent job queue, and
+relies on \texttt{condition variable} as its synchronization primitive\citep{osbook}.
+The worker thread executes the infinite loop of waiting for a task to come into
+the queue, and
+executes the task. The main(coordinator) thread assigns tasks to workers by 
+adding tasks to the queue, and wait for workers to complete,
+which is similar to the \texttt{pthread\_join} operation.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
