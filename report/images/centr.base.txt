@@ -1,0 +1,22 @@
+# Working Dirctory snap-slow/examples/centrality
+# Command: sudo perf record ./centrality
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 69K of event 'cycles'
+# Event count (approx.): 67888286873
+#
+# Overhead  Command     Shared Object         Symbol                                                                                                              
+# ........  ..........  ....................  ....................................................................................................................
+#
+    40.13%  centrality  centrality            [.] TSnap::GetBetweennessCentr<PUNGraph>
+    25.83%  centrality  centrality            [.] TBreathFS<PUNGraph>::DoBfs
+     8.95%  centrality  centrality            [.] THash<TInt, TInt>::AddKey
+     5.35%  centrality  centrality            [.] THash<TInt, TFlt>::AddKey
+     3.72%  centrality  centrality            [.] THash<TPair<TInt, TInt>, TFlt>::GetKeyId
+     3.65%  centrality  centrality            [.] TNetConstraint<PUNGraph>::AddConstraint
+     2.54%  centrality  centrality            [.] THash<TInt, TUNGraph::TNode>::GetKeyId
+     1.14%  centrality  libc.so.6             [.] malloc
+     1.12%  centrality  centrality            [.] THash<TPair<TInt, TInt>, TFlt>::AddKey
