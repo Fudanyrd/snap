@@ -83,6 +83,9 @@ int gettimeofday(struct timeval *tp, void *tzp)
 #include "dt.cpp"
 #include "ut.cpp"
 #include "hash.cpp"
+#include "bitset.cpp"
+#include "queue.cpp"
+#include "ringbuf.cpp"
 
 #include "unicode.cpp"
 #include "unicodestring.cpp"

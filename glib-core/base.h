@@ -12,6 +12,9 @@
 #include "hash.h"
 #include "hashmp.h"
 #include "xml.h"
+#include "bitset.h"
+#include "queue.h"
+#include "ringbuf.h"
 
 #include "xmath.h"
 #include "xmlser.h"
