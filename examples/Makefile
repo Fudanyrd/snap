@@ -2,7 +2,8 @@
 # Makefile for non-Microsoft compilers
 #
 
-all: MakeAll
+include ./src.mk
+all: $(all_depends)
 
 MakeAll:
 	mkdir -p Release
@@ -47,47 +48,8 @@ MakeAll:
 	$(MAKE) -C temporalmotifs
 	$(MAKE) -C testgraph
 
-clean:
-	$(MAKE) clean -C agmgen
-	$(MAKE) clean -C agmfit
-	$(MAKE) clean -C bigclam
-	$(MAKE) clean -C cascadegen
-	$(MAKE) clean -C cascades
-	$(MAKE) clean -C centrality
-	$(MAKE) clean -C cesna
-	$(MAKE) clean -C circles
-	$(MAKE) clean -C cliques
-	$(MAKE) clean -C coda
-	$(MAKE) clean -C community
-	$(MAKE) clean -C concomp
-	$(MAKE) clean -C flows
-	$(MAKE) clean -C forestfire
-	$(MAKE) clean -C graphgen
-	$(MAKE) clean -C graphhash
-	$(MAKE) clean -C infopath
-	$(MAKE) clean -C kcores
-	$(MAKE) clean -C knnjaccardsim
-	$(MAKE) clean -C kronem
-	$(MAKE) clean -C kronfit
-	$(MAKE) clean -C krongen
-	$(MAKE) clean -C localmotifcluster
-	$(MAKE) clean -C lshtest
-	$(MAKE) clean -C magfit
-	$(MAKE) clean -C maggen
-	$(MAKE) clean -C mkdatasets
-	$(MAKE) clean -C motifcluster
-	$(MAKE) clean -C motifs
-	$(MAKE) clean -C ncpplot
-	$(MAKE) clean -C netevol
-	$(MAKE) clean -C netinf
-	$(MAKE) clean -C netstat
-	$(MAKE) clean -C node2vec
-	$(MAKE) clean -C pool
-	$(MAKE) clean -C randwalk
-	$(MAKE) clean -C rolx
-	$(MAKE) clean -C temporalmotifs
-	$(MAKE) clean -C testgraph
-	rm -rf Debug Release ipch *.tgz *.zip
+clean: $(clean_all_depends)
+	@echo "Cleaned all example subdirectories"
 
 bin-linux:
 	mv Release Snap-$(VERSION)-Ubuntu18.04

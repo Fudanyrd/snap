@@ -6,9 +6,12 @@ all: MakeAll
 
 test: TestAll
 
+# MAKEFLAGS += -j8
+
 MakeAll:
-	$(MAKE) -C snap-core
-	$(MAKE) -C examples
+	@./init
+	$(MAKE) -C snap-core $(MAKEFLAGS)
+	$(MAKE) all -C examples $(MAKEFLAGS)
 
 TestAll:
 	$(MAKE) run -C test

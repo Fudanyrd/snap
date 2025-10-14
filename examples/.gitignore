@@ -2,6 +2,7 @@
 !*/Makefile
 */.DS_Store
 */*.dSYM
+src.mk
 Release/
 *.gexf
 agmfit/agmfitmain

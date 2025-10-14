@@ -1,0 +1,17 @@
+#!/usr/bin/sh
+
+set -ex
+
+doinit() {
+  cwd=$PWD
+  cd $1
+  ./configure  
+  cd $cwd
+}
+
+doinit examples
+doinit glib-core 
+doinit snap-core 
+
+exit 0
+
