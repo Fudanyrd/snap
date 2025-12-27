@@ -15,6 +15,32 @@ Linux Dependencies:
 
 After installing these dependencies, simply run `make all`.
 
+## Testing
+
+Running unittests is recommended but requires an additional
+dependency: [gtest](https://github.com/google/googletest/tree/release-1.5.0).
+
+Run the following command to add the gtest library:
+```bash
+wget https://github.com/google/googletest/archive/refs/tags/release-1.5.0.tar.gz -O gtest.tar.gz
+tar xvf gtest.tar.gz
+mv googletest-release-1.5.0 gtest
+cd gtest && g++ $CXXFLAGS -I. -I./include -c src/gtest-all.cc -std=c++98
+ar -rv libgtest.a gtest-all.o
+```
+
+To run all the tests:
+```bash
+$ make -C test run;
+# very long outputs; you should see:
+[----------] Global test environment tear-down
+[==========] 358 tests from 34 test cases ran. (22897 ms total)
+[  PASSED  ] 358 tests.
+```
+
+> [TSymTm::Sleep](./test/test-TSysTm.cpp#L87) test is non-deterministic and may fail sometimes.
+> If it fails, just re-run the tests.
+
 ## Building Report
 
 Our project report is in the [report](./report) folder. To build the .pdf report, you have to:

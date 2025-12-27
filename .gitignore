@@ -1,6 +1,8 @@
 # Mac OS X
 .DS_Store
 
+gtest
+
 # Visual Studio
 .vscode
 *.vcxproj
