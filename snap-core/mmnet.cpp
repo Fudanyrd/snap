@@ -1364,3 +1364,13 @@ int TMMNet::AddEdgeAttributes(PNEANet& NewNet, TCrossNet& Net, TVec<TPair<TStr, 
   }
   return 0;
 }
+
+std::ostream& operator<<(std::ostream& os, const TMMNet::TCrossNetI& crossNetIt) {
+  std::cout << (const void *) &crossNetIt;
+  return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const TMMNet::TModeNetI& modeNetIt) {
+  std::cout << (const void *) &modeNetIt;
+  return os;
+}

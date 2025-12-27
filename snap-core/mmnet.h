@@ -681,6 +681,9 @@ private:
   void GetPartitionRanges(TIntPrV& Partitions, const TInt& NumPartitions, const TInt& MxVal) const;
 };
 
+std::ostream& operator<<(std::ostream& os, const TMMNet::TCrossNetI& crossNetIt);
+std::ostream& operator<<(std::ostream& os, const TMMNet::TModeNetI& modeNetIt);
+
 // set flags
 namespace TSnap {
 template <> struct IsMultiGraph<TModeNet> { enum { Val = 1 }; };
