@@ -28,6 +28,21 @@ parallelize code remains highly challenging for compilers.
 
 % "😭 -> 😃" 
 
+\paragraph{Optimizing C++ Softwares}
+
+\par Dean et al. has proposed many optimization techniques 
+to improve the performance of softwares written in \texttt{C++}
+\citep{perfhint}. Some key insights include better measurements
+to better understand program bottle-neck, allocate objects
+on stack to reduce heap memory allocation (potentially slow), 
+avoid unnecessary function calls (by storing return value in temporary
+objects), and use lock-free operations. It is worth noting that 
+more optimizations are possible, such as applying faster memory
+allocators (e.g. Google's \texttt{tcmalloc}\citep{tcmalloc}),
+memory alignment to avoid cache misses, etc. Among all the optimization
+techniques we applied, our code benefited most from
+multi-threading parallelism via our crafted thread pool.
+
 \subsection{Community Detection Algorithms}
 
 \par We investigate two types of community detection algorithms,
