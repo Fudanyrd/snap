@@ -6,6 +6,8 @@
 #include "fl.h"
 #include "ut.h"
 
+#include <iostream>
+
 /////////////////////////////////////////////////
 // Address-Pointer
 template <class TRec>
@@ -785,6 +787,19 @@ public:
   static TVec<TVal, TSizeTy> GetV(const TVal& Val1, const TVal& Val2, const TVal& Val3, const TVal& Val4, const TVal& Val5, const TVal& Val6, const TVal& Val7, const TVal& Val8, const TVal& Val9){
     TVec<TVal, TSizeTy> V(9, 0); V.Add(Val1); V.Add(Val2); V.Add(Val3); V.Add(Val4); V.Add(Val5); V.Add(Val6); V.Add(Val7); V.Add(Val8); V.Add(Val9); return V;}
 };
+
+template <typename TVal, typename TSizeTy>
+std::ostream & operator<<(std::ostream &os, const TVec<TVal, TSizeTy> &vec) {
+  os << "[";
+  for (TSizeTy i = 0; i < vec.Len(); i++) {
+    os << vec[i];
+    if (i < vec.Len() - 1) {
+      os << ", ";
+    }
+  }
+  os << "]";
+  return os;
+}
 
 template <class TVal, class TSizeTy>
 void TVec<TVal, TSizeTy>::Resize(const TSizeTy& _MxVals){

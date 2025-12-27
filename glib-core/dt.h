@@ -1,6 +1,8 @@
 #ifndef glib_dt_h
 #define glib_dt_h 1
 
+#include <iostream>
+
 #include "bd.h"
 #include "fl.h"
 #include "glib-config.h"
@@ -699,6 +701,8 @@ public:
   friend TStr operator+(const TStr& LStr, const TStr& RStr);
   friend TStr operator+(const TStr& LStr, const char* RCStr);
 };
+
+std::ostream &operator <<(std::ostream &out, const TStr &str);
 
 /////////////////////////////////////////////////
 // Input-String

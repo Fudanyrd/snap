@@ -1,3 +1,5 @@
+// Thread.cpp : Defines the thread pool implementation.
+// 
 #include <string.h>
 
 #include "thread.h"

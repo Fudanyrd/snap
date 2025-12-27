@@ -2342,3 +2342,9 @@ TStr TFltRect::GetStr() const {
   ChA+=TFlt::GetStr(MxY, "%0.2f"); ChA+=')';
   return ChA;
 }
+
+std::ostream &operator <<(std::ostream &out, const TStr &str) {
+  const char *data = str.CStr();
+  out.write(data, str.Len());
+  return out;
+}
