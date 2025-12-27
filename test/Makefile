@@ -13,6 +13,7 @@
 
 include ../Makefile.config
 CXXFLAGS += $(CXXOPENMP)
+CXXFLAGS += -I../gtest -I../gtest/include -L../gtest
 LIBS += -lgtest
 # use the following line for linking the static library
 #LIBS += $(HOME)/miniconda3/lib/libgtest.a
