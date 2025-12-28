@@ -67,3 +67,76 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Shadow gap:              cc
 ==3276==ABORTING
 make: *** [Makefile:69: test] Error 1
+
+# in Makefile.config, change -O3 to -O1, and add CXXFLAGS += -fsanitize=address
+# @All: this bug exists since the original version of snap-core 
+# @All: this test non-deterministically pass or fail. Run multiple times to reproduce.
+$ make -C test run
+[ RUN      ] TTable.ParallelJoin
+=================================================================
+==4829==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x506008322a24 at pc 0x5848b3ff3af7 bp 0x7d27bc6a3a40 sp 0x7d27bc6a3a30
+WRITE of size 4 at 0x506008322a24 thread T10
+    #0 0x5848b3ff3af6 in TInt::operator=(TInt const&) ../glib-core/dt.h:1166
+    #1 0x5848b3ff3af6 in TVec<TInt, int>::Add(TInt&) ../glib-core/ds.h:582
+    #2 0x5848b4df617a in void TTable::UpdateGrouping<TInt>(THashMP<TInt, TVec<TInt, int>, TDefaultHashFunc<TInt> >&, TInt, TInt) const [clone .constprop.0] ../snap-core/table.h:1574
+    #3 0x5848b4d5bf97 in TTable::GroupByIntColMP(TStr const&, THashMP<TInt, TVec<TInt, int>, TDefaultHashFunc<TInt> >&, TBool) const [clone ._omp_fn.0] ../snap-core/table.cpp:1258
+    #4 0x7d27c40ecc0d  (/lib/x86_64-linux-gnu/libgomp.so.1+0x1dc0d)
+    #5 0x7d27c3a94ac2  (/lib/x86_64-linux-gnu/libc.so.6+0x94ac2)
+    #6 0x7d27c3b268bf  (/lib/x86_64-linux-gnu/libc.so.6+0x1268bf)
+
+0x506008322a24 is located 4 bytes to the right of 64-byte region [0x5060083229e0,0x506008322a20)
+allocated by thread T11 here:
+    #0 0x7d27c42b6357 in operator new[](unsigned long) ../../../../src/libsanitizer/asan/asan_new_delete.cpp:102
+    #1 0x5848b3eb1b4c in TVec<TInt, int>::Resize(int const&) ../glib-core/ds.h:828
+    #2 0x5848b3ff3ac2 in TVec<TInt, int>::Add(TInt&) ../glib-core/ds.h:582
+    #3 0x5848b4e42060  (/mnt/d/raw-pj/snap/test/run-all-tests+0x1379060)
+
+Thread T10 created by T0 here:
+    #0 0x7d27c4258685 in __interceptor_pthread_create ../../../../src/libsanitizer/asan/asan_interceptors.cpp:216
+    #1 0x7d27c40ed25f  (/lib/x86_64-linux-gnu/libgomp.so.1+0x1e25f)
+    #2 0x7d27c40e3a10 in GOMP_parallel (/lib/x86_64-linux-gnu/libgomp.so.1+0x14a10)
+    #3 0x7ffe45f39e3f  ([stack]+0x1ee3f)
+    #4 0xe968d245d0aaefff  (<unknown module>)
+
+Thread T11 created by T0 here:
+    #0 0x7d27c4258685 in __interceptor_pthread_create ../../../../src/libsanitizer/asan/asan_interceptors.cpp:216
+    #1 0x7d27c40ed25f  (/lib/x86_64-linux-gnu/libgomp.so.1+0x1e25f)
+    #2 0x7d27c40e3a10 in GOMP_parallel (/lib/x86_64-linux-gnu/libgomp.so.1+0x14a10)
+    #3 0x7ffe45f39e3f  ([stack]+0x1ee3f)
+    #4 0xe968d245d0aaefff  (<unknown module>)
+
+SUMMARY: AddressSanitizer: heap-buffer-overflow ../glib-core/dt.h:1166 in TInt::operator=(TInt const&)
+Shadow bytes around the buggy address:
+  0x0a0c8105c4f0: fa fa fa fa fd fd fd fd fd fd fd fd fa fa fa fa
+  0x0a0c8105c500: fd fd fd fd fd fd fd fd fa fa fa fa fd fd fd fd
+  0x0a0c8105c510: fd fd fd fd fa fa fa fa fd fd fd fd fd fd fd fd
+  0x0a0c8105c520: fa fa fa fa fd fd fd fd fd fd fd fd fa fa fa fa
+  0x0a0c8105c530: fd fd fd fd fd fd fd fd fa fa fa fa 00 00 00 00
+=>0x0a0c8105c540: 00 00 00 00[fa]fa fa fa fd fd fd fd fd fd fd fd
+  0x0a0c8105c550: fa fa fa fa fd fd fd fd fd fd fd fd fa fa fa fa
+  0x0a0c8105c560: fa fa fa fa fa fa fa fa fa fa fa fa fd fd fd fd
+  0x0a0c8105c570: fd fd fd fd fa fa fa fa fd fd fd fd fd fd fd fd
+  0x0a0c8105c580: fa fa fa fa fd fd fd fd fd fd fd fd fa fa fa fa
+  0x0a0c8105c590: fd fd fd fd fd fd fd fd fa fa fa fa fd fd fd fd
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+  Shadow gap:              cc
+==4829==ABORTING
+make: *** [Makefile:69: test] Error 1
