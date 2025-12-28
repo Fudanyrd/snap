@@ -819,7 +819,7 @@ void TVec<TVal, TSizeTy>::Resize(const TSizeTy& _MxVals){
     try {
       ValT=new TVal[MxVals];
     }
-    catch (std::exception Ex){
+    catch (std::exception &Ex){
       FailR(TStr::Fmt("TVec::Resize: %s, Length:%s, Capacity:%s, New capacity:%s, Type:%s [Program failed to allocate more memory. Solution: Get a bigger machine and a 64-bit compiler.]",
         Ex.what(), TInt::GetStr(Vals).CStr(), TInt::GetStr(MxVals).CStr(), TInt::GetStr(_MxVals).CStr(), GetTypeNm(*this).CStr()).CStr());}
   } else {
@@ -827,7 +827,7 @@ void TVec<TVal, TSizeTy>::Resize(const TSizeTy& _MxVals){
     try {
       NewValT=new TVal[MxVals];
     }
-    catch (std::exception Ex){
+    catch (std::exception &Ex){
       FailR(TStr::Fmt("TVec::Resize: %s, Length:%s, Capacity:%s, New capacity:%s, Type:%s [Program failed to allocate more memory. Solution-1: Get a bigger machine and a 64-bit compiler.]",
         Ex.what(), TInt::GetStr(Vals).CStr(), TInt::GetStr(MxVals).CStr(), TInt::GetStr(_MxVals).CStr(), GetTypeNm(*this).CStr()).CStr());}
     IAssert(NewValT!=NULL);
@@ -1682,7 +1682,7 @@ void TVecPool<TVal, TSizeTy>::Resize(const TSize& _MxVals){
   if (_MxVals <= MxVals){ return; } else { MxVals = _MxVals; }
   if (ValBf == NULL) {
     try { ValBf = new TVal [MxVals]; }
-    catch (std::exception Ex) {
+    catch (std::exception &Ex) {
       FailR(TStr::Fmt("TVecPool::Resize 1: %s, MxVals: %s. [Program failed to allocate more memory. Solution: Get a bigger machine and a 64-bit compiler.]", Ex.what(), TInt::GetStr(uint64(_MxVals)).CStr()).CStr()); }
     IAssert(ValBf != NULL);
     if (EmptyVal != TVal()) { PutAll(EmptyVal); }
@@ -1690,7 +1690,7 @@ void TVecPool<TVal, TSizeTy>::Resize(const TSize& _MxVals){
     // printf("*** Resize vector pool: %llu -> %llu\n", uint64(Vals), uint64(MxVals));
     TVal* NewValBf = NULL;
     try { NewValBf = new TVal [MxVals]; }
-    catch (std::exception Ex) {
+    catch (std::exception &Ex) {
       FailR(TStr::Fmt("TVecPool::Resize 1: %s, MxVals: %s. [Program failed to allocate more memory. Solution: Get a bigger machine and a 64-bit compiler.]", Ex.what(), TInt::GetStr(uint64(_MxVals)).CStr()).CStr()); }
     IAssert(NewValBf != NULL);
     if (FastCopy) {
@@ -1715,7 +1715,7 @@ template <class TVal, class TSizeTy>
 TVecPool<TVal, TSizeTy>::TVecPool(const TVecPool& Pool) : FastCopy(Pool.FastCopy), GrowBy(Pool.GrowBy), MxVals(Pool.MxVals), Vals(Pool.Vals), EmptyVal(Pool.EmptyVal), IdToOffV(Pool.IdToOffV) {
   try {
     ValBf = new TVal [MxVals]; }
-  catch (std::exception Ex) {
+  catch (std::exception &Ex) {
     FailR(TStr::Fmt("TVecPool::TVecPool: %s, MxVals: %s. [Program failed to allocate memory. Solution: Get a bigger machine and a 64-bit compiler.]", Ex.what(), TInt::GetStr(uint64(MxVals)).CStr()).CStr()); }
   IAssert(ValBf != NULL);
   if (FastCopy) {
@@ -1765,7 +1765,7 @@ TVecPool<TVal, TSizeTy>& TVecPool<TVal, TSizeTy>::operator = (const TVecPool& Po
     IdToOffV=Pool.IdToOffV;
     try {
       ValBf = new TVal [MxVals]; }
-    catch (std::exception Ex) {
+    catch (std::exception &Ex) {
       FailR(TStr::Fmt("TVecPool::operator=: %s, MxVals: %s. [Program failed to allocate memory. Solution: Get a bigger machine and a 64-bit compiler.]", Ex.what(), TInt::GetStr(uint64(MxVals)).CStr()).CStr()); }
     IAssert(ValBf != NULL);
     if (FastCopy) {
@@ -1922,7 +1922,7 @@ void TVecPool<TVal>::Resize(const ::TSize& _MxVals){
   if (_MxVals <= MxVals){ return; } else { MxVals = _MxVals; }
   if (ValBf == NULL) {
     try { ValBf = new TVal [MxVals]; }
-    catch (std::exception Ex) {
+    catch (std::exception &Ex) {
       FailR(TStr::Fmt("TVecPool::Resize 1: %s, MxVals: %d. [Program failed to allocate more memory. Solution: Get a bigger machine and a 64-bit compiler.]", Ex.what(), _MxVals).CStr()); }
     IAssert(ValBf != NULL);
     if (EmptyVal != TVal()) { PutAll(EmptyVal); }
@@ -1930,7 +1930,7 @@ void TVecPool<TVal>::Resize(const ::TSize& _MxVals){
     // printf("*** Resize vector pool: %llu -> %llu\n", uint64(Vals), uint64(MxVals));
     TVal* NewValBf = NULL;
     try { NewValBf = new TVal [MxVals]; }
-    catch (std::exception Ex) { FailR(TStr::Fmt("TVecPool::Resize 2: %s, MxVals: %d. [Program failed to allocate more memory. Solution: Get a bigger machine and a 64-bit compiler.]", Ex.what(), _MxVals).CStr()); }
+    catch (std::exception &Ex) { FailR(TStr::Fmt("TVecPool::Resize 2: %s, MxVals: %d. [Program failed to allocate more memory. Solution: Get a bigger machine and a 64-bit compiler.]", Ex.what(), _MxVals).CStr()); }
     IAssert(NewValBf != NULL);
     if (FastCopy) {
       memcpy(NewValBf, ValBf, Vals*sizeof(TVal)); }
@@ -1956,7 +1956,7 @@ TVecPool<TVal>::TVecPool(const TVecPool& Pool):
   FastCopy(Pool.FastCopy), GrowBy(Pool.GrowBy),
   MxVals(Pool.MxVals), Vals(Pool.Vals), EmptyVal(Pool.EmptyVal), IdToOffV(Pool.IdToOffV) {
   try { ValBf = new TVal [MxVals]; }
-  catch (std::exception Ex) { FailR(TStr::Fmt("TVecPool::TVecPool: %s, MxVals: %d", Ex.what(), MxVals).CStr()); }
+  catch (std::exception &Ex) { FailR(TStr::Fmt("TVecPool::TVecPool: %s, MxVals: %d", Ex.what(), MxVals).CStr()); }
   IAssert(ValBf != NULL);
   if (FastCopy) {
     memcpy(ValBf, Pool.ValBf, MxVals*sizeof(TVal)); }
@@ -2005,7 +2005,7 @@ TVecPool<TVal>& TVecPool<TVal>::operator = (const TVecPool& Pool) {
     EmptyVal = Pool.EmptyVal;
     IdToOffV=Pool.IdToOffV;
     try { ValBf = new TVal [MxVals]; }
-    catch (std::exception Ex) { FailR(TStr::Fmt("TVec::operator= : %s, MxVals: %d", Ex.what(), MxVals).CStr()); }
+    catch (std::exception &Ex) { FailR(TStr::Fmt("TVec::operator= : %s, MxVals: %d", Ex.what(), MxVals).CStr()); }
     IAssert(ValBf != NULL);
     if (FastCopy) {
       memcpy(ValBf, Pool.ValBf, Vals*sizeof(TVal)); }
