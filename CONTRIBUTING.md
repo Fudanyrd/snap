@@ -20,6 +20,8 @@ After installing these dependencies, simply run `make all`.
 Running unittests is recommended but requires an additional
 dependency: [gtest](https://github.com/google/googletest/tree/release-1.5.0).
 
+<!-- Why not add this as a git submodule? -->
+
 Run the following command to add the gtest library:
 ```bash
 wget https://github.com/google/googletest/archive/refs/tags/release-1.5.0.tar.gz -O gtest.tar.gz

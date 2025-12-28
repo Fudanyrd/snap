@@ -1,0 +1,69 @@
+# in Makefile.config, change -O3 to -O1, and add CXXFLAGS += -fsanitize=address
+# @Fudanyrd: this bug exists since the original version of snap-core 
+$ make -C test run
+[ RUN      ] subgraph.TestGetGraphUnionAttr
+=================================================================
+==3276==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x506004ef2d7c at pc 0x60716bfaa499 bp 0x7ffef39646f0 sp 0x7ffef39646e0
+READ of size 4 at 0x506004ef2d7c thread T0
+    #0 0x60716bfaa498 in TInt::operator==(TInt const&) const ../snap-core/../glib-core/dt.h:1168
+    #1 0x60716bfaa498 in TNEANet::EdgeAttrIsIntDeleted(int const&, THashKeyDatI<TStr, TPair<TInt, TInt> > const&) const ../snap-core/network.cpp:496
+    #2 0x60716bfaa824 in TNEANet::IntAttrNameEI(TInt const&, THashKeyDatI<TStr, TPair<TInt, TInt> >, TVec<TStr, int>&) const ../snap-core/network.cpp:334
+    #3 0x60716c18ab8c in TNEANet::IntAttrNameEI(TInt const&, TVec<TStr, int>&) const ../snap-core/network.h:2425
+    #4 0x60716c18ab8c in TSnap::AddEdgeWithAttributes(TPt<TNEANet> const&, TPt<TNEANet>&, int, int) ../snap-core/subgraph.cpp:226
+    #5 0x60716c18eff1 in TSnap::GetGraphUnionAttr(TPt<TNEANet>&, TPt<TNEANet> const&) ../snap-core/subgraph.cpp:535
+    #6 0x60716b82fa76 in subgraph_TestGetGraphUnionAttr_Test::TestBody() /mnt/d/raw-pj/snap/test/test-subgraph.cpp:885
+    #7 0x60716c3fd660 in testing::Test::Run() src/gtest.cc:2095
+    #8 0x60716c3fd660 in testing::Test::Run() src/gtest.cc:2052
+    #9 0x60716c3fd827 in testing::internal::TestInfoImpl::Run() src/gtest.cc:2314
+    #10 0x60716c3fd9bd in testing::internal::TestInfoImpl::Run() src/gtest.cc:2273
+    #11 0x60716c3fd9bd in testing::TestCase::Run() src/gtest.cc:2420
+    #12 0x60716c3fdf7a in testing::TestCase::Run() src/gtest.cc:2407
+    #13 0x60716c3fdf7a in testing::internal::UnitTestImpl::RunAllTests() src/gtest.cc:4024
+    #14 0x60716b327bdd in main /mnt/d/raw-pj/snap/test/run-all-tests.cpp:5
+    #15 0x78f551e29d8f  (/lib/x86_64-linux-gnu/libc.so.6+0x29d8f)
+    #16 0x78f551e29e3f in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x29e3f)
+    #17 0x60716b3276d4 in _start (/mnt/d/raw-pj/snap/test/run-all-tests+0x29b6d4)
+
+0x506004ef2d7c is located 4 bytes to the left of 64-byte region [0x506004ef2d80,0x506004ef2dc0)
+allocated by thread T0 here:
+    #0 0x78f5526b6357 in operator new[](unsigned long) ../../../../src/libsanitizer/asan/asan_new_delete.cpp:102
+    #1 0x60716b474b4c in TVec<TInt, int>::Resize(int const&) ../glib-core/ds.h:828
+    #2 0x60716c2985e8 in TVec<TInt, int>::Add() ../snap-core/../glib-core/ds.h:576
+    #3 0x60716c2985e8 in TVec<TInt, int>::Ins(int const&, TInt const&) ../snap-core/../glib-core/ds.h:1111
+    #4 0x7ffef3964e1f  ([stack]+0x1ee1f)
+
+SUMMARY: AddressSanitizer: heap-buffer-overflow ../snap-core/../glib-core/dt.h:1168 in TInt::operator==(TInt const&) const
+Shadow bytes around the buggy address:
+  0x0a0c809d6550: fa fa fa fa fa fa fa fa fa fa fa fa fd fd fd fd
+  0x0a0c809d6560: fd fd fd fd fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0a0c809d6570: fa fa fa fa fd fd fd fd fd fd fd fd fa fa fa fa
+  0x0a0c809d6580: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0a0c809d6590: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+=>0x0a0c809d65a0: fa fa fa fa 00 00 00 00 00 00 00 00 fa fa fa[fa]
+  0x0a0c809d65b0: 00 00 00 00 00 00 00 00 fa fa fa fa fa fa fa fa
+  0x0a0c809d65c0: fa fa fa fa fa fa fa fa fd fd fd fd fd fd fd fd
+  0x0a0c809d65d0: fa fa fa fa fd fd fd fd fd fd fd fd fa fa fa fa
+  0x0a0c809d65e0: fd fd fd fd fd fd fd fd fa fa fa fa fa fa fa fa
+  0x0a0c809d65f0: fa fa fa fa fa fa fa fa fd fd fd fd fd fd fd fd
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+  Shadow gap:              cc
+==3276==ABORTING
+make: *** [Makefile:69: test] Error 1

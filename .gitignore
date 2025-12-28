@@ -72,3 +72,5 @@ tutorials/*
 tutorials/.DS_Store
 tutorials/*.dSYM
 benchmarking/*.dat
+
+!bugs.log
