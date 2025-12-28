@@ -1,6 +1,7 @@
 # Mac OS X
 .DS_Store
-
+*.zip
+*.tar.gz
 gtest
 
 # Visual Studio
