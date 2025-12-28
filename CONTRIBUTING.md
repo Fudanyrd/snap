@@ -87,3 +87,8 @@ Please follow these rules when contributing to project report:
   <li> Before committing, use a spell checker such as aspell to check your modified latex files. </li>
 </ul>
 
+
+## Known Issues
+
+Please check [bugs.log](./bugs.log) for known bugs.
+
