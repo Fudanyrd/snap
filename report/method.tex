@@ -83,47 +83,42 @@ Therefore, we feel that keeping all these thread in a global pool is necessary;
 it avoids such runtime overhead by creating threads at program initialization,
 and destroys them before exiting.
 
-\begin{figure}[ht]
-    \centering
+\begin{figure*}[ht]
+	\begin{subfigure}[b]{0.35\textwidth}
+		\centering
+	    \includegraphics[width=0.75\textwidth]{images/ompdemo.pdf}
+    	\caption{The Execution Time of Program~\ref{code:ompdemo}. \\
+        The \texttt{Ideal} line illustrates the execution time when the threading
+        approach has no overhead. \\
+        We conclude that the overhead of threading increases with scaling of $N$.
+        When $N = 10^5$, the overhead reaches \textbf{58.2\%}. }
+	    \label{fig:ompdemo}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.2\textwidth}
+		% A place-holder.
+			\makebox{{\color[HTML]{ffffff} place-holder}}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.35\textwidth}
+    	\centering
 \begin{lstlisting}[frame=tlbr]
 #include <omp.h>
 
 int main(int argc, char **argv) {
-  int fd = open("/dev/null", O_WRONLY);
-  /* Here N is provided by command-line arguments. 
-   * It controls how many times the sum operation
-   * are executed.
-   */
   for (int run = 0; run < (*\namedplaceholder{N}*) ; run++) {
     int total = 0;
     #pragma (*\namedplaceholder{omp parallel}*) for
     for (int i = 0; i < 1024; i++) {
       total += rand();
     }
-    /* Avoid compiler optimizing out the total,
-     * and introduce lower overhead.
-     */
-    (void) write(fd, &total, sizeof(total));
   }
 
-  close(fd);
   return 0;
 }
 \end{lstlisting}
     \caption{Demo program to illustrate overhead of threading.}
     \label{code:ompdemo}
-\end{figure}
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.5\textwidth]{images/ompdemo.pdf}
-    \caption{The Execution Time of Program~\ref{code:ompdemo}. \\
-        The \texttt{Ideal} line illustrates the execution time when the threading
-        approach has no overhead. \\
-        We conclude that the overhead of threading increases with scaling of $N$.
-        When $N = 10^5$, the overhead reaches \textbf{58.2\%}. }
-    \label{fig:ompdemo}
-\end{figure}
+	\end{subfigure}
+\end{figure*}
 
 \par The idea of the thread pool is to reserve several worker threads; when the
 main thread needs to perform some intense computations, the pool will wake up
