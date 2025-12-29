@@ -92,4 +92,57 @@ usually densely connected, and that ground-truth communities contain
 high-degree hub nodes that reside in community overlaps.
 
 \subsection{Node Centrality Algorithms}
-\par TODO
+
+\paragraph{Degree Centrality}
+Degree centrality\citep{centralityclarify, centralitymeasures} 
+is the most direct measure of node importance and is defined as the number of edges incident to a node. 
+For a node $v$ in a graph $G(V,E)$, the degree centrality $C_D(v)$ is simply:
+\begin{align} \label{form:degree}
+    C_D(v) = \deg(v)
+\end{align}
+where $\deg(v)$ denotes the degree of node $v$, i.e., the number of edges connected to $v$.
+For directed graphs, we can distinguish between \emph{in-degree} $C_D^{in}(v)$ (number of incoming edges) 
+and \emph{out-degree} $C_D^{out}(v)$ (number of outgoing edges).
+It reflects the level of \emph{local connectivity} of a node within the network.
+Nodes with high degree centrality can directly reach a large number of neighbors, granting them strong immediate influence. 
+While degree centrality does not account for the importance of neighboring nodes or the global network structure, 
+it serves as an intuitive and effective baseline for identifying highly connected or active nodes.
+
+
+\paragraph{Betweenness Centrality}
+Betweenness centrality\citep{betweennesscentrality, fastercentrality}
+measures the extent to which a node lies on shortest paths between other pairs of nodes. 
+It quantifies how frequently a node acts as an intermediary in the flow of information across the network.
+For a node $v$ in a graph $G(V,E)$, the betweenness centrality $C_B(v)$ is defined as:
+\begin{align} \label{form:betweenness}
+    C_B(v) = \sum_{s \neq v \neq t \in V} \frac{\sigma_{st}(v)}{\sigma_{st}}
+\end{align}
+where $\sigma_{st}$ is the total number of shortest paths from node $s$ to node $t$, 
+and $\sigma_{st}(v)$ is the number of those shortest paths that pass through node $v$.
+Nodes with high betweenness centrality play a critical \emph{bridging role}, 
+connecting otherwise weakly connected regions or communities of the network. 
+Such nodes may not exhibit high degree or global influence, yet they are structurally indispensable for facilitating communication and information diffusion.
+In our analysis, betweenness centrality is used to highlight broker nodes that control or mediate interactions between different parts of the network. 
+The comparison between betweenness-based rankings and other centrality measures reveals distinct notions of importance captured by different metrics.
+
+\paragraph{PageRank}
+PageRank\citep{websearchengine, googlepagerank}
+is a global centrality measure based on a random walk model over the network. 
+It estimates the long-term probability that a random walker visits a given node, 
+assuming that the walker follows outgoing edges with a fixed probability $d$ (damping factor) and randomly jumps to any node with probability $(1-d)$ (teleportation probability). 
+The PageRank score $PR(v)$ for node $v$ is computed iteratively as:
+\begin{align} \label{form:pagerank}
+    PR(v) = \frac{1-d}{N} + d \sum_{u \in M(v)} \frac{PR(u)}{L(u)}
+\end{align}
+where $N$ is the total number of nodes in the network, $M(v)$ is the set of nodes that link to $v$, 
+$L(u)$ is the number of outgoing edges from node $u$, and $d \in [0,1]$ is the damping factor (typically set to $0.85$).
+As a result, PageRank assigns higher scores to nodes that are linked by other highly ranked nodes.
+In the context of network analysis, 
+PageRank reflects a node's \emph{global influence} and authority. 
+Nodes with high PageRank are not necessarily those with the largest number of direct connections, 
+but those endorsed by other important nodes. 
+This property makes PageRank particularly suitable for directed networks such as citation networks, 
+where link direction carries semantic meaning and indicates the flow of influence.
+In this report, PageRank is used to identify globally influential nodes and to characterize the overall centralization of influence within the network. 
+The resulting PageRank scores are further analyzed through distribution plots and Top-K rankings.
+

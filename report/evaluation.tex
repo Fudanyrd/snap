@@ -99,5 +99,47 @@ The visualization of the three datasets are shown in Figure~\ref{fig:agmviz}.
     \label{fig:agmviz}
 \end{figure*}
 
+
+\subsection{Identifying Opinion Leaders}
+
+\par To evaluate the effectiveness of our opinion leader identification approach, we visualize the network structure with node size and color encoded by different centrality measures. All visualizations are generated on the citation network, modeled as a directed graph with $1000$ nodes and $5403$ edges. By comparing structural patterns across different centrality-based visualizations, we assess whether the identified high-ranking nodes occupy prominent and meaningful positions in the network.
+
+\paragraph{Degree-based Visualization}
+Figure~\ref{fig:degreeviz} visualizes the network according to degree centrality. Nodes with high degree centrality tend to have many direct connections and are often located in locally dense areas of the network. While these nodes exhibit strong immediate influence due to their high connectivity, they do not always coincide with nodes that are globally influential or structurally central, demonstrating the limitation of degree centrality when used in isolation.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{vizz/citation_network_structure_degree.pdf}
+    \caption{Network structure visualization with node size and color proportional to degree centrality.}
+    \label{fig:degreeviz}
+\end{figure}
+
+
+\paragraph{Facebook Betweenness-based Visualization}
+In Figure~\ref{fig:facebookbetweennessviz}, node size and color reflect betweenness centrality in the Facebook network. High-betweenness nodes tend to appear at key junctions that connect otherwise loosely linked regions, acting as structural bridges across communities. These nodes are not necessarily the most densely clustered in the core; instead, they often lie on critical paths that enable information to travel between different parts of the network. This pattern suggests that betweenness centrality is effective for identifying broker-type opinion leaders in the Facebook graph.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{vizz/facebook_network_structure_betweenness.pdf}
+    \caption{Facebook network structure visualization with node size and color proportional to betweenness centrality.}
+    \label{fig:facebookbetweennessviz}
+\end{figure}
+
+
+\paragraph{Wiki-Vote PageRank-based Visualization}
+In Figure~\ref{fig:wikivotepagerankviz}, node size and color reflect PageRank scores in the Wiki-Vote network. High-PageRank nodes are typically located in the dense core of the directed graph, where they receive strong endorsement-like links from other influential nodes. Compared with betweenness, PageRank emphasizes global importance driven by incoming connectivity and recursive influence, making it suitable for highlighting authoritative opinion leaders who attract attention from many prominent actors in the voting network.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{vizz/wiki-vote_network_structure_pagerank.pdf}
+    \caption{Wiki-Vote network structure visualization with node size and color proportional to PageRank.}
+    \label{fig:wikivotepagerankviz}
+\end{figure}
+
+
+\par Overall, the visualization results demonstrate that different centrality measures capture distinct structural roles of influential nodes, while the composite score effectively integrates these roles. This confirms that our centrality-based approach can successfully identify opinion leaders with diverse yet meaningful structural characteristics.
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
