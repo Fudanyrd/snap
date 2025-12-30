@@ -1,0 +1,37 @@
+
+\section{Appendix}
+
+\subsection{Code Quality}
+
+Even though our goal is to make the \snap framework
+run faster, we also tried improve its 
+code quality by running its unit tests. 
+
+\paragraph{Bug Finding} At the time
+\snap is developed, memory error detectors like
+Valgrind\citep{valgrind} and Address Sanitizer\citep{asan} 
+were still under development, so it is understandable that
+the original \textbf{SNAP} framework contain hard-to-trigger
+memory errors. With Address Sanitizer\citep{asan} and the
+unit test suite provided by the authors of \snap, we 
+found a total of two memory errors in it:
+
+\begin{itemize}
+    \item In unit test \texttt{subgraph.TestGetGraphUnionAttr}:
+    we found heap buffer overflow, read of size 4. Impacts
+    of this bug are relatively benign, and usually do not
+    lead to visible errors.
+
+    \item In unit test \texttt{TTable.ParallelJoin}, we found
+    heap underflow, write of size 4. This may confuse 
+    the memory allocator and lead to crash.
+\end{itemize}
+
+% Add our mining results and insights.
+% THIS IS REQUIRED by instructor
+\subsection{Research Findings}
+
+We reached similar conclusions as prior work regarding social network
+properties. For example, overlaps of communities are usually densely
+connected\citep{yang2012structure}, as shown in Figure~\ref{fig:agmviz}.
+

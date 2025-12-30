@@ -241,3 +241,38 @@ eprint = {https://doi.org/10.1080/0022250X.2001.9990249}
 }
 
 
+@inproceedings{asan,
+author = {Serebryany, Konstantin and Bruening, Derek and Potapenko, Alexander and Vyukov, Dmitry},
+title = {AddressSanitizer: a fast address sanity checker},
+year = {2012},
+publisher = {USENIX Association},
+address = {USA},
+abstract = {Memory access bugs, including buffer overflows and uses of freed heap memory, remain a serious problem for programming languages like C and C++. Many memory error detectors exist, but most of them are either slow or detect a limited set of bugs, or both.This paper presents AddressSanitizer, a new memory error detector. Our tool finds out-of-bounds accesses to heap, stack, and global objects, as well as use-after-free bugs. It employs a specialized memory allocator and code instrumentation that is simple enough to be implemented in any compiler, binary translation system, or even in hardware.AddressSanitizer achieves efficiency without sacrificing comprehensiveness. Its average slowdown is just 73\% yet it accurately detects bugs at the point of occurrence. It has found over 300 previously unknown bugs in the Chromium browser and many bugs in other software.},
+booktitle = {Proceedings of the 2012 USENIX Conference on Annual Technical Conference},
+pages = {28},
+numpages = {1},
+location = {Boston, MA},
+series = {USENIX ATC'12}
+}
+
+@article{valgrind,
+author = {Nethercote, Nicholas and Seward, Julian},
+title = {Valgrind: a framework for heavyweight dynamic binary instrumentation},
+year = {2007},
+issue_date = {June 2007},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {42},
+number = {6},
+issn = {0362-1340},
+url = {https://doi.org/10.1145/1273442.1250746},
+doi = {10.1145/1273442.1250746},
+abstract = {Dynamic binary instrumentation (DBI) frameworks make it easy to build dynamic binary analysis (DBA) tools such as checkers and profilers. Much of the focus on DBI frameworks has been on performance; little attention has been paid to their capabilities. As a result, we believe the potential of DBI has not been fully exploited.In this paper we describe Valgrind, a DBI framework designed for building heavyweight DBA tools. We focus on its unique support for shadow values-a powerful but previously little-studied and difficult-to-implement DBA technique, which requires a tool to shadow every register and memory value with another value that describes it. This support accounts for several crucial design features that distinguish Valgrind from other DBI frameworks. Because of these features, lightweight tools built with Valgrind run comparatively slowly, but Valgrind can be used to build more interesting, heavyweight tools that are difficult or impossible to build with other DBI frameworks such as Pin and DynamoRIO.},
+journal = {SIGPLAN Not.},
+month = jun,
+pages = {89–100},
+numpages = {12},
+keywords = {Memcheck, Valgrind, dynamic binary analysis, dynamic binary instrumentation, shadow values}
+}
+
+
